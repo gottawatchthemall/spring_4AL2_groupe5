@@ -16,12 +16,12 @@ public class Work {
     private String imdbId;
     private String title;
     private String year;
-    private LocalDate releasedDate;
-    private Integer duration;
-    private Set<String> genres;
-    private Set<String> directors;
-    private Set<String> writers;
-    private Set<String> actors;
+    private String releasedDate;
+    private String duration;
+    private String genres;
+    private String directors;
+    private String writers;
+    private String actors;
     private String plot;
     private String country;
     private String awards;

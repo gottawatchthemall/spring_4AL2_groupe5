@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity(name = "work")
 @NoArgsConstructor
@@ -27,10 +26,10 @@ public class WorkEntity {
     private String year;
 
     @Column
-    private LocalDate releasedDate;
+    private String releasedDate;
 
     @Column
-    private Integer duration;
+    private String duration;
 
     @Column
     private String genres;
