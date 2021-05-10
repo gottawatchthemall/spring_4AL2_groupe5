@@ -1,6 +1,6 @@
 package com.gotta_watch_them_all.app.unit.work.infrastructure.dataprovider.mapper;
 
-import com.gotta_watch_them_all.app.core.entity.Media;
+import com.gotta_watch_them_all.app.media.core.Media;
 import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.infrastructure.dataprovider.entity.WorkMovieDbApiEntity;
 import com.gotta_watch_them_all.app.work.infrastructure.dataprovider.mapper.WorkMovieDbApiMapper;
