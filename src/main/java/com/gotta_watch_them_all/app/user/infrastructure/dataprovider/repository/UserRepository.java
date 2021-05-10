@@ -1,6 +1,6 @@
-package com.gotta_watch_them_all.app.infrastructure.dataprovider.repository;
+package com.gotta_watch_them_all.app.user.infrastructure.dataprovider.repository;
 
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.UserEntity;
+import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

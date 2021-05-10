@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.core.entity;
+package com.gotta_watch_them_all.app.user.core.entity;
 
 import com.gotta_watch_them_all.app.role.core.entity.Role;
 import lombok.Data;

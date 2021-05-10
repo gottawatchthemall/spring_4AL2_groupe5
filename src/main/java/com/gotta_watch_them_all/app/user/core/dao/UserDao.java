@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.core.dao;
+package com.gotta_watch_them_all.app.user.core.dao;
 
 import com.gotta_watch_them_all.app.role.core.entity.Role;
 

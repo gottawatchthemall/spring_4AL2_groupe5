@@ -1,7 +1,7 @@
 package com.gotta_watch_them_all.app.auth.infrastructure.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.UserEntity;
+import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

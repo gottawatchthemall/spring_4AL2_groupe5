@@ -1,7 +1,7 @@
 package com.gotta_watch_them_all.app.auth.infrastructure.security;
 
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.UserEntity;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.repository.UserRepository;
+import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.entity.UserEntity;
+import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
