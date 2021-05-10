@@ -1,6 +1,4 @@
-package com.gotta_watch_them_all.app.core.dao;
-
-import com.gotta_watch_them_all.app.core.entity.Media;
+package com.gotta_watch_them_all.app.media.core;
 
 import java.util.List;
 

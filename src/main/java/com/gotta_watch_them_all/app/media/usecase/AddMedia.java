@@ -1,7 +1,8 @@
-package com.gotta_watch_them_all.app.usecase.media;
+package com.gotta_watch_them_all.app.media.usecase;
 
-import com.gotta_watch_them_all.app.core.dao.MediaDao;
+import com.gotta_watch_them_all.app.media.core.MediaDao;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
+import com.gotta_watch_them_all.app.media.core.Media;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class AddMedia {
         return mediaDao.createMedia(name);
     }
 
-    private void checkIfMediaNameNotExist(String name, com.gotta_watch_them_all.app.core.entity.Media check) throws AlreadyCreatedException {
+    private void checkIfMediaNameNotExist(String name, Media check) throws AlreadyCreatedException {
         if (check != null) {
             var message = String.format("Media with name '%s' is already created", name);
             throw new AlreadyCreatedException(message);

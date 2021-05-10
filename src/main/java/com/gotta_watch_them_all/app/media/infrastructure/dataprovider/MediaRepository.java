@@ -1,6 +1,6 @@
-package com.gotta_watch_them_all.app.infrastructure.dataprovider.repository;
+package com.gotta_watch_them_all.app.media.infrastructure.dataprovider;
 
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.MediaEntity;
+import com.gotta_watch_them_all.app.media.infrastructure.dataprovider.MediaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MediaRepository extends JpaRepository<MediaEntity, Long> {

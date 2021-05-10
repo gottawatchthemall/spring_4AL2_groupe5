@@ -1,8 +1,8 @@
-package com.gotta_watch_them_all.app.unit.usecase.media;
+package com.gotta_watch_them_all.app.unit.media.usecase;
 
-import com.gotta_watch_them_all.app.core.dao.MediaDao;
+import com.gotta_watch_them_all.app.media.core.MediaDao;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
-import com.gotta_watch_them_all.app.usecase.media.DeleteMedia;
+import com.gotta_watch_them_all.app.media.usecase.DeleteMedia;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

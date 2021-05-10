@@ -1,7 +1,7 @@
-package com.gotta_watch_them_all.app.infrastructure.dataprovider.mapper;
+package com.gotta_watch_them_all.app.media.infrastructure.dataprovider;
 
-import com.gotta_watch_them_all.app.core.entity.Media;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.MediaEntity;
+import com.gotta_watch_them_all.app.media.core.Media;
+import com.gotta_watch_them_all.app.media.infrastructure.dataprovider.MediaEntity;
 
 public class MediaMapper {
     public static Media entityToDomain(MediaEntity entity) {

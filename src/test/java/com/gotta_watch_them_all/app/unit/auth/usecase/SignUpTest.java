@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.unit.usecase.auth;
+package com.gotta_watch_them_all.app.unit.auth.usecase;
 
 import com.gotta_watch_them_all.app.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.core.dao.UserDao;

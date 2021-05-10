@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.infrastructure.entrypoint.request;
+package com.gotta_watch_them_all.app.media.infrastructure.entrypoint;
 
 import lombok.Data;
 

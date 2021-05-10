@@ -1,7 +1,7 @@
-package com.gotta_watch_them_all.app.usecase.media;
+package com.gotta_watch_them_all.app.media.usecase;
 
-import com.gotta_watch_them_all.app.core.dao.MediaDao;
-import com.gotta_watch_them_all.app.core.entity.Media;
+import com.gotta_watch_them_all.app.media.core.MediaDao;
+import com.gotta_watch_them_all.app.media.core.Media;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,14 +1,11 @@
-package com.gotta_watch_them_all.app.infrastructure.entrypoint.controller;
+package com.gotta_watch_them_all.app.media.infrastructure.entrypoint;
 
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.adapter.MediaAdapter;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.request.CreateMediaRequest;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.response.MediaResponse;
-import com.gotta_watch_them_all.app.usecase.media.AddMedia;
-import com.gotta_watch_them_all.app.usecase.media.DeleteMedia;
-import com.gotta_watch_them_all.app.usecase.media.FindAllMedias;
-import com.gotta_watch_them_all.app.usecase.media.FindMediaById;
+import com.gotta_watch_them_all.app.media.usecase.AddMedia;
+import com.gotta_watch_them_all.app.media.usecase.DeleteMedia;
+import com.gotta_watch_them_all.app.media.usecase.FindAllMedias;
+import com.gotta_watch_them_all.app.media.usecase.FindMediaById;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

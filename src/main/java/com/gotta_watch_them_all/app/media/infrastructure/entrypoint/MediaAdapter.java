@@ -1,7 +1,7 @@
-package com.gotta_watch_them_all.app.infrastructure.entrypoint.adapter;
+package com.gotta_watch_them_all.app.media.infrastructure.entrypoint;
 
-import com.gotta_watch_them_all.app.core.entity.Media;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.response.MediaResponse;
+import com.gotta_watch_them_all.app.media.core.Media;
+import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.MediaResponse;
 
 public class MediaAdapter {
     public static MediaResponse domainToResponse(Media media) {
