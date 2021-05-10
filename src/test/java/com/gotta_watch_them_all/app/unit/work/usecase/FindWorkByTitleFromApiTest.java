@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.work.unit.usecase;
+package com.gotta_watch_them_all.app.unit.work.usecase;
 
 import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;

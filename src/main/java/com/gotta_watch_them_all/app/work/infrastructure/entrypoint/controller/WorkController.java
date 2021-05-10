@@ -38,7 +38,7 @@ public class WorkController {
     public ResponseEntity<URI> saveWatchedWork(
             @Valid @RequestBody SaveWorkRequest request
     ) {
-        var newWork = saveWatchedWork.execute(request.getId());
+        //var newWork = saveWatchedWork.execute(request.getId());
         return null;
     }
 

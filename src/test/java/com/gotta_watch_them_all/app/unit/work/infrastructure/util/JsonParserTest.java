@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.work.unit.infrastructure.util;
+package com.gotta_watch_them_all.app.unit.work.infrastructure.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

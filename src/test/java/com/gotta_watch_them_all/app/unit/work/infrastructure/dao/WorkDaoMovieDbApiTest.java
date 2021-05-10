@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.work.unit.infrastructure.dao;
+package com.gotta_watch_them_all.app.unit.work.infrastructure.dao;
 
 import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;

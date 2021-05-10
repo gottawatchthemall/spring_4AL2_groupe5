@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.work.unit.usecase;
+package com.gotta_watch_them_all.app.unit.work.usecase;
 
 import com.gotta_watch_them_all.app.work.usecase.SaveWatchedWork;
 import org.junit.jupiter.api.BeforeEach;
