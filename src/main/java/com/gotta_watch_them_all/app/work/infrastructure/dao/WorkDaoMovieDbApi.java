@@ -46,5 +46,10 @@ public class WorkDaoMovieDbApi implements WorkDao {
         }
     }
 
+    @Override
+    public Work findById(String id) {
+        return null;
+    }
+
 
 }

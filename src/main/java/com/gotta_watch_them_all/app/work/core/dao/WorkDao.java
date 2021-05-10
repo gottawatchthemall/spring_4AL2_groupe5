@@ -6,4 +6,6 @@ import java.util.Set;
 
 public interface WorkDao {
     Set<Work> findAllByTitle(String title);
+
+    Work findById(String id);
 }
