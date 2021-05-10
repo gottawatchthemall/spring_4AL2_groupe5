@@ -1,8 +1,8 @@
 package com.gotta_watch_them_all.app.integration;
 
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.media.core.Media;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.helper.AuthHelper;

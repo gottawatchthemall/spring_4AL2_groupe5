@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.core.entity;
 
+import com.gotta_watch_them_all.app.role.core.entity.Role;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

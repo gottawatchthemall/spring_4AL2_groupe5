@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.core.entity;
+package com.gotta_watch_them_all.app.role.core.entity;
 
 public enum RoleName {
     ROLE_USER,

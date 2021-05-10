@@ -1,9 +1,9 @@
 package com.gotta_watch_them_all.app.e2e;
 
 import com.gotta_watch_them_all.app.media.core.MediaDao;
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.media.core.Media;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
 import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.CreateMediaRequest;
 import io.restassured.http.ContentType;

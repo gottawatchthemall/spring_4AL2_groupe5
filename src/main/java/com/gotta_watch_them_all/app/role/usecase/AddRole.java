@@ -1,7 +1,7 @@
-package com.gotta_watch_them_all.app.usecase.role;
+package com.gotta_watch_them_all.app.role.usecase;
 
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

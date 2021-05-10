@@ -1,9 +1,9 @@
 package com.gotta_watch_them_all.app.infrastructure.dao;
 
 import com.gotta_watch_them_all.app.core.dao.UserDao;
-import com.gotta_watch_them_all.app.core.entity.Role;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
 import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.UserEntity;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.mapper.RoleMapper;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.mapper.RoleMapper;
 import com.gotta_watch_them_all.app.infrastructure.dataprovider.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

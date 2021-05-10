@@ -1,8 +1,8 @@
-package com.gotta_watch_them_all.app.infrastructure.bootstrap;
+package com.gotta_watch_them_all.app.role.infrastructure.bootstrap;
 
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
-import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;

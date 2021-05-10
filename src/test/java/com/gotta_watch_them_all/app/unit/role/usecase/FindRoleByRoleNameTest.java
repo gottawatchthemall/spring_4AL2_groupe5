@@ -1,9 +1,9 @@
-package com.gotta_watch_them_all.app.unit.usecase.role;
+package com.gotta_watch_them_all.app.unit.role.usecase;
 
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
-import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
-import com.gotta_watch_them_all.app.usecase.role.FindRoleByRoleName;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.usecase.FindRoleByRoleName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

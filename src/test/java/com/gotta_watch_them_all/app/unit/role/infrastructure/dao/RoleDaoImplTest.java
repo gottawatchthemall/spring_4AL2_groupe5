@@ -1,11 +1,11 @@
-package com.gotta_watch_them_all.app.unit.infrastructure.dao;
+package com.gotta_watch_them_all.app.unit.role.infrastructure.dao;
 
-import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
-import com.gotta_watch_them_all.app.infrastructure.dao.RoleDaoImpl;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.RoleEntity;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.mapper.RoleMapper;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.repository.RoleRepository;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.infrastructure.dao.RoleDaoImpl;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.entity.RoleEntity;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.mapper.RoleMapper;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.repository.RoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

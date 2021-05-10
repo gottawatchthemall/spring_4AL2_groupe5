@@ -1,9 +1,9 @@
 package com.gotta_watch_them_all.app.auth.usecase;
 
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.core.dao.UserDao;
-import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;

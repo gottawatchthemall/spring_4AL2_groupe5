@@ -1,7 +1,7 @@
-package com.gotta_watch_them_all.app.infrastructure.dataprovider.mapper;
+package com.gotta_watch_them_all.app.role.infrastructure.dataprovider.mapper;
 
-import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.RoleEntity;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.entity.RoleEntity;
 
 public class RoleMapper {
     public static Role entityToDomain(RoleEntity entity) {

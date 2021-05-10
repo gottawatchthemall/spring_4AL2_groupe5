@@ -1,11 +1,11 @@
-package com.gotta_watch_them_all.app.infrastructure.dao;
+package com.gotta_watch_them_all.app.role.infrastructure.dao;
 
-import com.gotta_watch_them_all.app.core.dao.RoleDao;
-import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.core.entity.RoleName;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.RoleEntity;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.mapper.RoleMapper;
-import com.gotta_watch_them_all.app.infrastructure.dataprovider.repository.RoleRepository;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.entity.RoleEntity;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.mapper.RoleMapper;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.infrastructure.dataprovider.entity;
 
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.entity.RoleEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
