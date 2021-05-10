@@ -2,7 +2,7 @@ package com.gotta_watch_them_all.app.helper;
 
 import com.gotta_watch_them_all.app.core.dao.UserDao;
 import com.gotta_watch_them_all.app.core.entity.Role;
-import com.gotta_watch_them_all.app.infrastructure.security.JwtUtils;
+import com.gotta_watch_them_all.app.auth.infrastructure.security.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

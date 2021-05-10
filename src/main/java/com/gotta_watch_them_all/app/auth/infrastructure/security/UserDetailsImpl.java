@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.infrastructure.security;
+package com.gotta_watch_them_all.app.auth.infrastructure.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.UserEntity;

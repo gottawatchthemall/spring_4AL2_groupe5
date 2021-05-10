@@ -6,7 +6,7 @@ import com.gotta_watch_them_all.app.core.entity.Role;
 import com.gotta_watch_them_all.app.core.entity.RoleName;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
-import com.gotta_watch_them_all.app.usecase.auth.SignUp;
+import com.gotta_watch_them_all.app.auth.usecase.SignUp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

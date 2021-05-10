@@ -1,14 +1,14 @@
-package com.gotta_watch_them_all.app.infrastructure.entrypoint.controller;
+package com.gotta_watch_them_all.app.auth.infrastructure.entrypoint;
 
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.request.LoginRequest;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.request.SignupRequest;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.response.JwtResponse;
+import com.gotta_watch_them_all.app.auth.infrastructure.entrypoint.LoginRequest;
+import com.gotta_watch_them_all.app.auth.infrastructure.entrypoint.SignupRequest;
+import com.gotta_watch_them_all.app.auth.infrastructure.entrypoint.JwtResponse;
 import com.gotta_watch_them_all.app.infrastructure.entrypoint.response.MessageResponse;
-import com.gotta_watch_them_all.app.infrastructure.security.JwtUtils;
-import com.gotta_watch_them_all.app.infrastructure.security.UserDetailsImpl;
-import com.gotta_watch_them_all.app.usecase.auth.SignUp;
+import com.gotta_watch_them_all.app.auth.infrastructure.security.JwtUtils;
+import com.gotta_watch_them_all.app.auth.infrastructure.security.UserDetailsImpl;
+import com.gotta_watch_them_all.app.auth.usecase.SignUp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

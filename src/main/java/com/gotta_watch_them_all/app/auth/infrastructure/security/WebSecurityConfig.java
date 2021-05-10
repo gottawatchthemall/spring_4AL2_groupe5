@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.infrastructure.security;
+package com.gotta_watch_them_all.app.auth.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.infrastructure.security;
+package com.gotta_watch_them_all.app.auth.infrastructure.security;
 
 import com.gotta_watch_them_all.app.infrastructure.dataprovider.entity.UserEntity;
 import com.gotta_watch_them_all.app.infrastructure.dataprovider.repository.UserRepository;
