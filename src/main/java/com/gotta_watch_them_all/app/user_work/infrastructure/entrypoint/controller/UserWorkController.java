@@ -4,6 +4,7 @@ package com.gotta_watch_them_all.app.user_work.infrastructure.entrypoint.control
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.user_work.infrastructure.entrypoint.request.SaveWorkRequest;
 import com.gotta_watch_them_all.app.user_work.usecase.SaveWatchedWork;
+import com.gotta_watch_them_all.app.work.core.exception.IllegalImdbIdGivenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class UserWorkController {
     @PostMapping
     public ResponseEntity<URI> saveWatchedWork(
             @Valid @RequestBody SaveWorkRequest request
-    ) throws NotFoundException {
+    ) throws NotFoundException, IllegalImdbIdGivenException {
         saveWatchedWork.execute(request.getUserId(), request.getImdbId());
         return null;
     }
