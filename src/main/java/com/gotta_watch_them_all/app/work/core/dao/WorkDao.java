@@ -8,4 +8,6 @@ public interface WorkDao {
     Set<Work> findAllByTitle(String title);
 
     Work findById(String id);
+
+    String save(Work work);
 }

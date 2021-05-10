@@ -78,8 +78,8 @@ class WorkDaoMovieDbApiTest {
 
     @Test
     public void findAllByTitle_should_return_all_works_containing_title() throws IllegalTitleGivenException, AnySearchValueFoundException, BadHttpRequestException {
-        Work work1 = new Work().setId("1").setTitle("Harry Potter et ceci");
-        Work work2 = new Work().setId("1").setTitle("Harry Potter et cela");
+        Work work1 = new Work().setImdbId("1").setTitle("Harry Potter et ceci");
+        Work work2 = new Work().setImdbId("1").setTitle("Harry Potter et cela");
 
         WorkMovieDbApiEntity entity1 = new WorkMovieDbApiEntity().setTitle("Harry Potter et cela").setImdbID("1");
         WorkMovieDbApiEntity entity2 = new WorkMovieDbApiEntity().setTitle("Harry Potter et ceci").setImdbID("1");
@@ -105,8 +105,8 @@ class WorkDaoMovieDbApiTest {
 
     @Test
     public void findAllByTitle_should_return_all_works_containing_title_without_duplicates() throws IllegalTitleGivenException, AnySearchValueFoundException, BadHttpRequestException {
-        Work work1 = new Work().setId("1").setTitle("Harry Potter et ceci");
-        Work work2 = new Work().setId("1").setTitle("Harry Potter et cela");
+        Work work1 = new Work().setImdbId("1").setTitle("Harry Potter et ceci");
+        Work work2 = new Work().setImdbId("1").setTitle("Harry Potter et cela");
 
         WorkMovieDbApiEntity entity1 = new WorkMovieDbApiEntity().setTitle("Harry Potter et cela").setImdbID("1");
         WorkMovieDbApiEntity entity2 = new WorkMovieDbApiEntity().setTitle("Harry Potter et ceci").setImdbID("1");

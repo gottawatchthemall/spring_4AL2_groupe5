@@ -10,7 +10,7 @@ public class WorkMovieDbApiMapper {
     public Work toDomain(WorkMovieDbApiEntity entity) {
         if (entity == null) return new Work();
         return new Work()
-                .setId(entity.getImdbID())
+                .setImdbId(entity.getImdbID())
                 .setTitle(entity.getTitle())
                 .setYear(entity.getYear())
                 .setPoster(entity.getPoster())

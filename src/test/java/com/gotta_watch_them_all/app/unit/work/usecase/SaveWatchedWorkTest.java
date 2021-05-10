@@ -15,7 +15,6 @@ class SaveWatchedWorkTest {
 
     @Test
     public void execute_should_throw_not_found_exception_if_id_incorrect() {
-
     }
 
     @Test

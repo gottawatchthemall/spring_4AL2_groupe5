@@ -34,7 +34,7 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Film"))
                 .setYear("2019")
@@ -53,7 +53,7 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Film"))
                 .setYear("2019")
@@ -72,7 +72,7 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Série"))
                 .setYear("2019")
@@ -91,7 +91,7 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Episode"))
                 .setYear("2019")
