@@ -4,6 +4,7 @@ import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;
 import com.gotta_watch_them_all.app.work.core.exception.BadHttpRequestException;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
+import com.gotta_watch_them_all.app.work.core.exception.TooManySearchArgumentsException;
 import com.gotta_watch_them_all.app.work.infrastructure.dao.WorkDaoMovieDbApi;
 import com.gotta_watch_them_all.app.work.infrastructure.util.JsonParser;
 import com.gotta_watch_them_all.app.work.infrastructure.dataprovider.entity.SearchMovieDbEntity;
@@ -40,7 +41,7 @@ class WorkDaoMovieDbApiTest {
     }
 
     @Test
-    public void findAllByTitle_should_call_api_req_builder_once() throws AnySearchValueFoundException, IllegalTitleGivenException {
+    public void findAllByTitle_should_call_api_req_builder_once() throws AnySearchValueFoundException, IllegalTitleGivenException, TooManySearchArgumentsException {
         Mockito.when(jsonParserMock.toObject(Mockito.any(), Mockito.any()))
                 .thenReturn(new SearchMovieDbEntity().setWorkMovieDbApiEntities(new ArrayList<>()));
         Mockito.when(apiRequestBuilderMock.setTitleToSearch(Mockito.anyString())).thenReturn(apiRequestBuilderMock);
@@ -77,7 +78,7 @@ class WorkDaoMovieDbApiTest {
     }
 
     @Test
-    public void findAllByTitle_should_return_all_works_containing_title() throws IllegalTitleGivenException, AnySearchValueFoundException, BadHttpRequestException {
+    public void findAllByTitle_should_return_all_works_containing_title() throws IllegalTitleGivenException, AnySearchValueFoundException, BadHttpRequestException, TooManySearchArgumentsException {
         Work work1 = new Work().setImdbId("1").setTitle("Harry Potter et ceci");
         Work work2 = new Work().setImdbId("1").setTitle("Harry Potter et cela");
 
@@ -104,7 +105,7 @@ class WorkDaoMovieDbApiTest {
     }
 
     @Test
-    public void findAllByTitle_should_return_all_works_containing_title_without_duplicates() throws IllegalTitleGivenException, AnySearchValueFoundException, BadHttpRequestException {
+    public void findAllByTitle_should_return_all_works_containing_title_without_duplicates() throws IllegalTitleGivenException, AnySearchValueFoundException, BadHttpRequestException, TooManySearchArgumentsException {
         Work work1 = new Work().setImdbId("1").setTitle("Harry Potter et ceci");
         Work work2 = new Work().setImdbId("1").setTitle("Harry Potter et cela");
 
@@ -130,5 +131,13 @@ class WorkDaoMovieDbApiTest {
         assertEquals(expectedWorksSet, sut.findAllByTitle("titre"));
     }
 
+//    @Test
+//    public void findByImdbId_should_call_api_requester_builder_set_work_id_once() {
+//        Mockito.when(jsonParserMock.toObject(Mockito.any(), Mockito.any()))
+//                .thenReturn(new SearchMovieDbEntity().setWorkMovieDbApiEntities(new ArrayList<>()));
+//        Mockito.when(apiRequestBuilderMock.setTitleToSearch(Mockito.anyString())).thenReturn(apiRequestBuilderMock);
+//        sut.findAllByTitle("title");
+//        Mockito.verify(apiRequestBuilderMock, Mockito.times(1)).build();
+//    }
 
 }

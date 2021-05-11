@@ -5,6 +5,7 @@ import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;
 import com.gotta_watch_them_all.app.work.core.exception.BadHttpRequestException;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
+import com.gotta_watch_them_all.app.work.core.exception.TooManySearchArgumentsException;
 import com.gotta_watch_them_all.app.work.infrastructure.util.JsonParser;
 import com.gotta_watch_them_all.app.work.infrastructure.dataprovider.entity.SearchMovieDbEntity;
 import com.gotta_watch_them_all.app.work.infrastructure.dataprovider.mapper.WorkMovieDbApiMapper;
@@ -42,7 +43,7 @@ public class WorkDaoMovieDbApi implements WorkDao {
                     .stream()
                     .map(mapper::toDomain)
                     .collect(Collectors.toSet());
-        } catch (AnySearchValueFoundException | IllegalTitleGivenException | BadHttpRequestException e) {
+        } catch (AnySearchValueFoundException | IllegalTitleGivenException | BadHttpRequestException | TooManySearchArgumentsException e) {
             e.printStackTrace();
             return null;
         }
