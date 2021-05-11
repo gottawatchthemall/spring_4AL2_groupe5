@@ -9,6 +9,7 @@ import com.gotta_watch_them_all.app.infrastructure.dao.UserDaoImpl;
 import com.gotta_watch_them_all.app.user_work.core.entity.UserWork;
 import com.gotta_watch_them_all.app.user_work.infrastructure.dao.UserWorkDaoMySql;
 import com.gotta_watch_them_all.app.user_work.infrastructure.dataprovider.entity.UserWorkEntity;
+import com.gotta_watch_them_all.app.user_work.infrastructure.dataprovider.mapper.UserWorkMapper;
 import com.gotta_watch_them_all.app.user_work.infrastructure.dataprovider.repository.UserWorkRepository;
 import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.infrastructure.dao.WorkDaoMySql;
@@ -27,13 +28,15 @@ class UserWorkDaoMySqlTest {
     private UserWorkRepository mockUserWorkRepository;
     private WorkDaoMySql mockWorkDaoMySql;
     private UserDaoImpl mockUserDao;
+    private UserWorkMapper mockMapper;
 
     @BeforeEach
     public void setup() {
         mockUserWorkRepository = Mockito.mock(UserWorkRepository.class);
         mockWorkDaoMySql = Mockito.mock(WorkDaoMySql.class);
         mockUserDao = Mockito.mock(UserDaoImpl.class);
-        sut = new UserWorkDaoMySql(mockUserWorkRepository, mockUserDao, mockWorkDaoMySql);
+        mockMapper = Mockito.mock(UserWorkMapper.class);
+        sut = new UserWorkDaoMySql(mockUserWorkRepository, mockUserDao, mockWorkDaoMySql, mockMapper);
     }
 
     @Test
@@ -103,6 +106,59 @@ class UserWorkDaoMySqlTest {
                 .setUser(user);
 
         assertEquals(expectedUserWork, sut.findById(1L, 2L));
+    }
+
+    @Test
+    public void save_should_call_repo_save_once() {
+        UserWork userWork = new UserWork().setUser(new User().setId(1L))
+                .setWork(new Work().setId(2L));
+        UserWorkEntity userWorkEntity = new UserWorkEntity().setUserId(1L)
+                .setWorkId(2L);
+        Mockito.when(mockMapper.toEntity(userWork))
+                .thenReturn(userWorkEntity);
+        sut.save(userWork);
+        Mockito.verify(mockUserWorkRepository, Mockito.times(1)).save(userWorkEntity);
+    }
+
+    @Test
+    public void save_should_call_mapper_to_entity_once() {
+        UserWork userWork = new UserWork().setUser(new User().setId(1L))
+                .setWork(new Work().setId(2L));
+        UserWorkEntity userWorkEntity = new UserWorkEntity().setUserId(1L)
+                .setWorkId(2L);
+        Mockito.when(mockUserWorkRepository.save(userWorkEntity))
+                .thenReturn(userWorkEntity);
+        sut.save(userWork);
+        Mockito.verify(mockMapper, Mockito.times(1)).toEntity(userWork);
+    }
+
+    @Test
+    public void save_should_call_mapper_to_domain_once() {
+        UserWork userWork = new UserWork().setUser(new User().setId(1L))
+                .setWork(new Work().setId(2L));
+        UserWorkEntity userWorkEntity = new UserWorkEntity().setUserId(1L)
+                .setWorkId(2L);
+        Mockito.when(mockUserWorkRepository.save(userWorkEntity))
+                .thenReturn(userWorkEntity);
+        Mockito.when(mockMapper.toEntity(userWork))
+                .thenReturn(userWorkEntity);
+        sut.save(userWork);
+        Mockito.verify(mockMapper, Mockito.times(1)).toDomain(userWorkEntity);
+    }
+
+    @Test
+    public void save_should_return_userWork() {
+        UserWork userWork = new UserWork().setUser(new User().setId(1L))
+                .setWork(new Work().setId(2L));
+        UserWorkEntity userWorkEntity = new UserWorkEntity().setUserId(1L)
+                .setWorkId(2L);
+        Mockito.when(mockUserWorkRepository.save(userWorkEntity))
+                .thenReturn(userWorkEntity);
+        Mockito.when(mockMapper.toEntity(userWork))
+                .thenReturn(userWorkEntity);
+        Mockito.when(mockMapper.toDomain(userWorkEntity))
+                .thenReturn(userWork);
+        assertEquals(userWork, sut.save(userWork));
     }
 
 }
