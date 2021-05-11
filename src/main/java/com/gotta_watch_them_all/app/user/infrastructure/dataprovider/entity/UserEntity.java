@@ -12,11 +12,12 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "user")
+@Entity(name = "userApp")
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

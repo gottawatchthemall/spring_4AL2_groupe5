@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - media-service-1
+name: Build and deploy JAR app to Azure Web App - media-service-2
 
 on:
   push:
     branches:
-      - develop
+      - testAzure
   workflow_dispatch:
 
 jobs:
@@ -47,7 +47,7 @@ jobs:
       id: deploy-to-webapp
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'media-service-1'
+        app-name: 'media-service-2'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_585eb6d05510437caddceea808d24ca7 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_6f713f2263704fafa9ba47ce0acdbfed }}
         package: '*.jar'
