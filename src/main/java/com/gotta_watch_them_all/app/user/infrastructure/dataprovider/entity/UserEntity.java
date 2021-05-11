@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity(name = "userApp")
+@Entity(name = "user")
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)

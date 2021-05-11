@@ -5,6 +5,7 @@ import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -13,6 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class FindWorkByTitleFromApi {
 
+    @Qualifier("movieDbApiDao")
     private final WorkDao workDao;
 
     public Set<Work> execute(String title) throws NotFoundException, IllegalTitleGivenException {

@@ -24,7 +24,6 @@ public class ApiRequester {
             if (response == null) return null;
             return response.body();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
             throw new BadHttpRequestException(String.format("Bad http request with uri : %s", request.uri().toString()));
         }
     }

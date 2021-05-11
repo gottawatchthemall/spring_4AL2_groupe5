@@ -21,7 +21,7 @@ class WorkMovieDbApiMapperTest {
 
     @Test
     public void toDomain_should_return_empty_object_if_entity_null() {
-        assertEquals(new Work(), sut.toDomain(null));
+        assertEquals(new Work(), sut.toBasicDomain(null));
     }
 
     @Test
@@ -34,13 +34,13 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Film"))
                 .setYear("2019")
                 .setPoster("https://lienversuneimage.fr");
 
-        assertEquals(expected, sut.toDomain(entity));
+        assertEquals(expected, sut.toBasicDomain(entity));
     }
 
     @Test
@@ -53,13 +53,13 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Film"))
                 .setYear("2019")
                 .setPoster("https://lienversuneimage.fr");
 
-        assertEquals(expected, sut.toDomain(entity));
+        assertEquals(expected, sut.toBasicDomain(entity));
     }
 
     @Test
@@ -72,13 +72,13 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Série"))
                 .setYear("2019")
                 .setPoster("https://lienversuneimage.fr");
 
-        assertEquals(expected, sut.toDomain(entity));
+        assertEquals(expected, sut.toBasicDomain(entity));
     }
 
     @Test
@@ -91,13 +91,90 @@ class WorkMovieDbApiMapperTest {
                 .setPoster("https://lienversuneimage.fr");
 
         Work expected = new Work()
-                .setId("example")
+                .setImdbId("example")
                 .setTitle("title")
                 .setMedia(new Media().setName("Episode"))
                 .setYear("2019")
                 .setPoster("https://lienversuneimage.fr");
 
-        assertEquals(expected, sut.toDomain(entity));
+        assertEquals(expected, sut.toBasicDomain(entity));
+    }
+
+    @Test
+    public void mapMedia_should_return_object_with_all_attr_mapped() {
+        Work expected = new Work()
+                .setImdbId("tt404021")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setName("Film"))
+                .setScore(50);
+
+        WorkMovieDbApiEntity entity = new WorkMovieDbApiEntity()
+                .setImdbID("tt404021")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setType("movie")
+                .setScore("50");
+
+        assertEquals(expected, sut.toFullDomain(entity));
+    }
+
+    @Test
+    public void mapMedia_should_not_map_score_if_NA() {
+        Work expected = new Work()
+                .setImdbId("tt404021")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setName("Film"));
+
+        WorkMovieDbApiEntity entity = new WorkMovieDbApiEntity()
+                .setImdbID("tt404021")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setType("movie")
+                .setScore("N/A");
+
+        assertEquals(expected, sut.toFullDomain(entity));
     }
 
 }

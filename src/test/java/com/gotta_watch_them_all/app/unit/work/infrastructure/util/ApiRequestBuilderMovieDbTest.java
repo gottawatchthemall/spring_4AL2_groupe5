@@ -1,7 +1,9 @@
 package com.gotta_watch_them_all.app.unit.work.infrastructure.util;
 
 import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;
+import com.gotta_watch_them_all.app.work.core.exception.IllegalImdbIdGivenException;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
+import com.gotta_watch_them_all.app.work.core.exception.TooManySearchArgumentsException;
 import com.gotta_watch_them_all.app.work.infrastructure.util.ApiRequestBuilderMovieDb;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +73,7 @@ class ApiRequestBuilderMovieDbTest {
     }
 
     @Test
-    public void setUri_should_set_base_url_to_start_with_https_plus_api_host() throws MalformedURLException, AnySearchValueFoundException, IllegalTitleGivenException {
+    public void setUri_should_set_base_url_to_start_with_https_plus_api_host() throws MalformedURLException, AnySearchValueFoundException, IllegalTitleGivenException, TooManySearchArgumentsException {
         sut.setTitleToSearch("titre").setUri();
         URI uri = (URI) ReflectionTestUtils.getField(sut, "uri");
         String url = uri.toURL().toString();
@@ -79,16 +81,36 @@ class ApiRequestBuilderMovieDbTest {
     }
 
     @Test
-    public void setUri_should_throw_no_search_value_found_if_title_to_search_null() {
+    public void setUri_should_throw_no_search_value_found_if_title_to_search_null_and_id_null() {
         assertThrows(AnySearchValueFoundException.class, () -> sut.setUri());
     }
 
     @Test
-    public void setUri_should_add_title() throws IllegalTitleGivenException, AnySearchValueFoundException, MalformedURLException {
+    public void setUri_should_not_throw_no_search_value_found_if_title_to_search_null_and_id_defined() throws IllegalImdbIdGivenException {
+        sut.setWorkIdToSearch("id");
+        assertDoesNotThrow(() -> sut.setUri());
+    }
+
+    @Test
+    public void setUri_should_not_throw_no_search_value_found_if_title_to_search_defined_and_id_null() throws IllegalTitleGivenException {
+        sut.setTitleToSearch("id");
+        assertDoesNotThrow(() -> sut.setUri());
+    }
+
+    @Test
+    public void setUri_should_add_title_to_uri() throws IllegalTitleGivenException, AnySearchValueFoundException, MalformedURLException, TooManySearchArgumentsException {
         sut.setTitleToSearch("titre").setUri();
         URI uri = (URI) ReflectionTestUtils.getField(sut, "uri");
         String url = uri.toURL().toString();
         assertTrue(url.contains("s=titre"));
+    }
+
+    @Test
+    public void setUri_should_add_workid_to_uri() throws AnySearchValueFoundException, MalformedURLException, TooManySearchArgumentsException, IllegalImdbIdGivenException {
+        sut.setWorkIdToSearch("id").setUri();
+        URI uri = (URI) ReflectionTestUtils.getField(sut, "uri");
+        String url = uri.toURL().toString();
+        assertTrue(url.contains("i=id"));
     }
 
     @Test
@@ -97,7 +119,7 @@ class ApiRequestBuilderMovieDbTest {
     }
 
     @Test
-    public void setUri_should_set_return_type_to_json() throws IllegalTitleGivenException, AnySearchValueFoundException, MalformedURLException {
+    public void setUri_should_set_return_type_to_json() throws IllegalTitleGivenException, AnySearchValueFoundException, MalformedURLException, TooManySearchArgumentsException {
         sut.setTitleToSearch("titre").setUri();
         URI uri = (URI) ReflectionTestUtils.getField(sut, "uri");
         String url = uri.toURL().toString();
@@ -105,14 +127,14 @@ class ApiRequestBuilderMovieDbTest {
     }
 
     @Test
-    public void build_should_call_set_uri_once() throws AnySearchValueFoundException, IllegalTitleGivenException {
+    public void build_should_call_set_uri_once() throws AnySearchValueFoundException, IllegalTitleGivenException, TooManySearchArgumentsException {
         ApiRequestBuilderMovieDb spy = Mockito.spy(sut);
         spy.setTitleToSearch("titre").build();
         Mockito.verify(spy, Mockito.times(1)).setUri();
     }
 
     @Test
-    public void build_should_return_http_request_with_right_uri() throws IllegalTitleGivenException, AnySearchValueFoundException {
+    public void build_should_return_http_request_with_right_uri() throws IllegalTitleGivenException, AnySearchValueFoundException, TooManySearchArgumentsException {
         HttpRequest requestFromBuilder = sut
                 .setTitleToSearch("titre")
                 .build();
@@ -121,7 +143,7 @@ class ApiRequestBuilderMovieDbTest {
     }
 
     @Test
-    public void build_should_return_http_request_with_right_headers() throws IllegalTitleGivenException, AnySearchValueFoundException {
+    public void build_should_return_http_request_with_right_headers() throws IllegalTitleGivenException, AnySearchValueFoundException, TooManySearchArgumentsException {
         HttpRequest requestFromBuilder = sut
                 .setTitleToSearch("titre")
                 .build();
@@ -130,11 +152,36 @@ class ApiRequestBuilderMovieDbTest {
     }
 
     @Test
-    public void build_should_return_http_request_with_right_method() throws IllegalTitleGivenException, AnySearchValueFoundException {
+    public void build_should_return_http_request_with_right_method() throws IllegalTitleGivenException, AnySearchValueFoundException, TooManySearchArgumentsException {
         HttpRequest requestFromBuilder = sut
                 .setTitleToSearch("titre")
                 .build();
 
         assertEquals(requestModel.method(), requestFromBuilder.method());
     }
+
+    @Test
+    public void setWorkIdToSearch_should_throw_illegal_excpetion_if_id_null() {
+        assertThrows(IllegalImdbIdGivenException.class, () -> sut.setWorkIdToSearch(null));
+    }
+
+    @Test
+    public void setWorkIdToSearch_should_throw_illegal_excpetion_if_id_blank() {
+        assertThrows(IllegalImdbIdGivenException.class, () -> sut.setWorkIdToSearch("   "));
+    }
+
+    @Test
+    public void setWorkIdToSearch_should_add_work_imdb_id() throws IllegalImdbIdGivenException {
+        sut.setWorkIdToSearch("ttsomething");
+        var imdbId = ReflectionTestUtils.getField(sut, "imdbIdToSearch");
+        assertEquals("ttsomething", imdbId);
+    }
+
+    @Test
+    public void setUri_should_throw_exception_if_both_imdbId_and_title_defined() throws IllegalImdbIdGivenException, IllegalTitleGivenException {
+        sut.setWorkIdToSearch("id");
+        sut.setTitleToSearch("titre");
+        assertThrows(TooManySearchArgumentsException.class, () -> sut.setUri());
+    }
+
 }

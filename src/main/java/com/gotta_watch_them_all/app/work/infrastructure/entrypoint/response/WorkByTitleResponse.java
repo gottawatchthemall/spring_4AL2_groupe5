@@ -7,8 +7,8 @@ import lombok.experimental.Accessors;
 @Data
 @JsonDeserialize
 @Accessors(chain = true)
-public class WorkResponse {
-    private String id;
+public class WorkByTitleResponse {
+    private String imdbId;
     private String title;
     private String year;
     private String type;

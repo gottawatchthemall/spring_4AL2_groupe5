@@ -19,4 +19,17 @@ public class UserMapper {
                         .collect(Collectors.toSet()))
                 .setVulgar(domain.isVulgar());
     }
+
+    public static User entityToDomain(UserEntity entity) {
+        return new User()
+                .setId(entity.getId())
+                .setEmail(entity.getEmail())
+                .setName(entity.getUsername())
+                .setPassword(entity.getPassword())
+                .setRoles(entity.getRoles()
+                        .stream()
+                        .map(RoleMapper::entityToDomain)
+                        .collect(Collectors.toSet()))
+                .setVulgar(entity.isVulgar());
+    }
 }

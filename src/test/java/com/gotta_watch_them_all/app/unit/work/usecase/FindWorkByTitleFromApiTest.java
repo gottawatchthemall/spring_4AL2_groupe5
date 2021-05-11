@@ -30,8 +30,8 @@ class FindWorkByTitleFromApiTest {
     @Test
     public void execute_should_call_dao_once_with_same_title() throws NotFoundException, IllegalTitleGivenException {
         Set<Work> expectedWorks = new HashSet<>();
-        expectedWorks.add(new Work().setId("1").setTitle("Harry Potter et ceci"));
-        expectedWorks.add(new Work().setId("1").setTitle("Harry Potter et cela"));
+        expectedWorks.add(new Work().setImdbId("1").setTitle("Harry Potter et ceci"));
+        expectedWorks.add(new Work().setImdbId("1").setTitle("Harry Potter et cela"));
 
         Mockito.when(workDaoMovieDbApiMock.findAllByTitle(Mockito.anyString())).thenReturn(expectedWorks);
 
@@ -42,8 +42,8 @@ class FindWorkByTitleFromApiTest {
     @Test
     public void should_parse_works_from_api() throws NotFoundException, IllegalTitleGivenException {
         Set<Work> expectedWorks = new HashSet<>();
-        expectedWorks.add(new Work().setId("1").setTitle("Harry Potter et ceci"));
-        expectedWorks.add(new Work().setId("1").setTitle("Harry Potter et cela"));
+        expectedWorks.add(new Work().setImdbId("1").setTitle("Harry Potter et ceci"));
+        expectedWorks.add(new Work().setImdbId("1").setTitle("Harry Potter et cela"));
 
         Mockito.when(workDaoMovieDbApiMock.findAllByTitle(Mockito.anyString())).thenReturn(expectedWorks);
 

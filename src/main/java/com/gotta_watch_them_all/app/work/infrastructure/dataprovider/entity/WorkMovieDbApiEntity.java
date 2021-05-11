@@ -22,4 +22,34 @@ public class WorkMovieDbApiEntity {
 
     @JsonProperty("imdbID")
     private String imdbID;
+
+    @JsonProperty("Released")
+    private String releasedDate;
+
+    @JsonProperty("Runtime")
+    private String duration;
+
+    @JsonProperty("Genre")
+    private String genres;
+
+    @JsonProperty("Director")
+    private String directors;
+
+    @JsonProperty("Writer")
+    private String writers;
+
+    @JsonProperty("Actors")
+    private String actors;
+
+    @JsonProperty("Plot")
+    private String plot;
+
+    @JsonProperty("Country")
+    private String country;
+
+    @JsonProperty("Awards")
+    private String awards;
+
+    @JsonProperty("Metascore")
+    private String score;
 }
