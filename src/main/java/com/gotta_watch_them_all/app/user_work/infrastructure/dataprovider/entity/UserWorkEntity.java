@@ -11,6 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Accessors(chain = true)
+@IdClass(UserWorkEntityId.class)
 public class UserWorkEntity implements Serializable {
     @Id
     @Column(name = "user_id")

@@ -3,6 +3,8 @@ package com.gotta_watch_them_all.app.unit.user_work.usecase;
 import com.gotta_watch_them_all.app.core.entity.User;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.infrastructure.dao.UserDaoImpl;
+import com.gotta_watch_them_all.app.user_work.core.dao.UserWorkDao;
+import com.gotta_watch_them_all.app.user_work.infrastructure.dao.UserWorkDaoMySql;
 import com.gotta_watch_them_all.app.user_work.usecase.SaveWatchedWork;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,13 +25,15 @@ class SaveWatchedWorkTest {
     private UserDaoImpl mockUserDao;
     private WorkDaoMySql mockWorkDaoMySql;
     private WorkDaoMovieDbApi mockWorkDaoMovieDbApi;
+    private UserWorkDaoMySql mockUserWorkDaoMySql;
 
     @BeforeEach
     public void setup() {
         mockUserDao = Mockito.mock(UserDaoImpl.class);
         mockWorkDaoMySql = Mockito.mock(WorkDaoMySql.class);
         mockWorkDaoMovieDbApi = Mockito.mock(WorkDaoMovieDbApi.class);
-        sut = new SaveWatchedWork(mockUserDao, mockWorkDaoMySql, mockWorkDaoMovieDbApi);
+        mockUserWorkDaoMySql = Mockito.mock(UserWorkDaoMySql.class);
+        sut = new SaveWatchedWork(mockUserDao, mockWorkDaoMySql, mockWorkDaoMovieDbApi, mockUserWorkDaoMySql);
     }
 
     @Test
@@ -78,6 +82,13 @@ class SaveWatchedWorkTest {
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(null);
         Mockito.when(mockWorkDaoMovieDbApi.findByImdbId("yo")).thenReturn(null);
         assertThrows(IllegalImdbIdGivenException.class, () -> sut.execute(1L, "yo"));
+    }
+
+    @Test
+    public void execute_should_call_user_work_dao_find_once() throws NotFoundException, IllegalImdbIdGivenException {
+        Mockito.when(mockUserDao.findById(1L)).thenReturn(new User());
+        Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(new Work());
+
     }
 
     //    @Test
