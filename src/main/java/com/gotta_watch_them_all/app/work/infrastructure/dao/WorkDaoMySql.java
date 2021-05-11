@@ -52,9 +52,10 @@ public class WorkDaoMySql implements WorkDao {
         return workMySqlMapper.toDomain(workEntity);
     }
 
-
     @Override
-    public String save(Work work) {
-        return null;
+    public Work save(Work work) {
+        var workEntity = workMySqlMapper.toEntity(work);
+        var newWork = workRepository.save(workEntity);
+        return workMySqlMapper.toDomain(newWork);
     }
 }

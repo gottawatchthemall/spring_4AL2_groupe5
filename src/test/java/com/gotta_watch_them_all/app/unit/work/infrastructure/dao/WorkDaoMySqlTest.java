@@ -102,4 +102,212 @@ class WorkDaoMySqlTest {
         assertEquals(expectedWork, sut.findByImdbId("bjr"));
     }
 
+    @Test
+    public void save_should_call_mapper_once() {
+        Work work = new Work()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setId(1L))
+                .setScore(50);
+        Mockito.when(mockWorkRepository.save(Mockito.any())).thenReturn(new WorkEntity());
+        sut.save(work);
+        Mockito.verify(mockWorkMySqlMapper, Mockito.times(1)).toEntity(work);
+    }
+
+    @Test
+    public void save_should_call_repo_save_once() {
+        Work work = new Work()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setId(1L));
+        WorkEntity entity = new WorkEntity()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMediaId(1L);
+        Mockito.when(mockWorkMySqlMapper.toEntity(work)).thenReturn(entity);
+        Mockito.when(mockWorkRepository.save(entity)).thenReturn(entity);
+        sut.save(work);
+        Mockito.verify(mockWorkRepository, Mockito.times(1)).save(entity);
+    }
+
+    @Test
+    public void save_should_mapper_to_domain_once() {
+        Work work = new Work()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setId(1L));
+
+        Work newWork = new Work()
+                .setId(55L)
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setId(1L));
+
+        WorkEntity entityBeforeSave = new WorkEntity()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMediaId(1L);
+
+        WorkEntity entityAfterSave = new WorkEntity()
+                .setId(55L)
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMediaId(1L);
+        Mockito.when(mockWorkMySqlMapper.toEntity(work)).thenReturn(entityBeforeSave);
+        Mockito.when(mockWorkMySqlMapper.toDomain(entityAfterSave)).thenReturn(newWork);
+        Mockito.when(mockWorkRepository.save(entityBeforeSave)).thenReturn(entityAfterSave);
+        sut.save(work);
+        Mockito.verify(mockWorkMySqlMapper, Mockito.times(1)).toDomain(entityAfterSave);
+    }
+
+    @Test
+    public void save_should_return_new_work() {
+        Work work = new Work()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setId(1L));
+
+        Work newWork = new Work()
+                .setId(55L)
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMedia(new Media().setId(1L));
+
+        WorkEntity entityBeforeSave = new WorkEntity()
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMediaId(1L);
+
+        WorkEntity entityAfterSave = new WorkEntity()
+                .setId(55L)
+                .setImdbId("bjr")
+                .setTitle("bjr")
+                .setYear("2222")
+                .setReleasedDate("demain")
+                .setDuration("150min")
+                .setGenres("action")
+                .setDirectors("action")
+                .setWriters("action")
+                .setActors("action")
+                .setPlot("action")
+                .setCountry("action")
+                .setAwards("action")
+                .setPoster("action")
+                .setMediaId(1L);
+        Mockito.when(mockWorkMySqlMapper.toEntity(work)).thenReturn(entityBeforeSave);
+        Mockito.when(mockWorkMySqlMapper.toDomain(entityAfterSave)).thenReturn(newWork);
+        Mockito.when(mockWorkRepository.save(entityBeforeSave)).thenReturn(entityAfterSave);
+        assertEquals(newWork, sut.save(work));
+    }
+
 }

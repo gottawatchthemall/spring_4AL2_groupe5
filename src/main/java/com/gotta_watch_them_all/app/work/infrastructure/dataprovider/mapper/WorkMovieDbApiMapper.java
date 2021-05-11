@@ -7,7 +7,31 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WorkMovieDbApiMapper {
-    public Work toDomain(WorkMovieDbApiEntity entity) {
+    public Work toFullDomain(WorkMovieDbApiEntity entity) {
+        if (entity == null) return new Work();
+        Work work = new Work()
+                .setImdbId(entity.getImdbID())
+                .setTitle(entity.getTitle())
+                .setYear(entity.getYear())
+                .setPoster(entity.getPoster())
+                .setMedia(mapMedia(entity.getType()))
+                .setReleasedDate(entity.getReleasedDate())
+                .setDuration(entity.getDuration())
+                .setGenres(entity.getGenres())
+                .setDirectors(entity.getDirectors())
+                .setWriters(entity.getWriters())
+                .setActors(entity.getActors())
+                .setPlot(entity.getPlot())
+                .setCountry(entity.getCountry())
+                .setAwards(entity.getAwards());
+
+        if (!entity.getScore().equalsIgnoreCase("N/A")) {
+            work.setScore(Integer.valueOf(entity.getScore()));
+        }
+        return work;
+    }
+
+    public Work toBasicDomain(WorkMovieDbApiEntity entity) {
         if (entity == null) return new Work();
         return new Work()
                 .setImdbId(entity.getImdbID())

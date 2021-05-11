@@ -5,7 +5,9 @@ import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.user_work.infrastructure.entrypoint.request.SaveWorkRequest;
 import com.gotta_watch_them_all.app.user_work.usecase.SaveWatchedWork;
+import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalImdbIdGivenException;
+import com.gotta_watch_them_all.app.work.core.exception.TooManySearchArgumentsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +38,8 @@ public class UserWorkController {
                                     "workId", newUserWork.getWork().getId()))
                     .toUri();
             return ResponseEntity.created(uri).build();
-        } catch (NotFoundException | IllegalImdbIdGivenException e) {
-            e.printStackTrace();
+        } catch (NotFoundException | TooManySearchArgumentsException
+                | IllegalImdbIdGivenException | AnySearchValueFoundException e) {
             return ResponseEntity
                     .badRequest()
                     .body(e.getMessage());

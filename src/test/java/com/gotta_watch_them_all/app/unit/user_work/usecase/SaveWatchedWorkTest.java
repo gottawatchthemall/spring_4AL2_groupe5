@@ -12,7 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.gotta_watch_them_all.app.work.core.entity.Work;
+import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalImdbIdGivenException;
+import com.gotta_watch_them_all.app.work.core.exception.TooManySearchArgumentsException;
 import com.gotta_watch_them_all.app.work.infrastructure.dao.WorkDaoMovieDbApi;
 import com.gotta_watch_them_all.app.work.infrastructure.dao.WorkDaoMySql;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +40,7 @@ class SaveWatchedWorkTest {
     }
 
     @Test
-    public void execute_should_call_user_dao_find_by_id_once() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException {
+    public void execute_should_call_user_dao_find_by_id_once() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Mockito.when(mockUserDao.findById(1L)).thenReturn(new User());
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(new Work());
         sut.execute(1L, "yo");
@@ -53,7 +55,7 @@ class SaveWatchedWorkTest {
 
 
     @Test
-    public void execute_should_call_mysql_work_dao_find_by_imdbid_once() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException {
+    public void execute_should_call_mysql_work_dao_find_by_imdbid_once() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Mockito.when(mockUserDao.findById(1L)).thenReturn(new User());
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(new Work());
         sut.execute(1L, "yo");
@@ -61,7 +63,7 @@ class SaveWatchedWorkTest {
     }
 
     @Test
-    public void execute_should_not_call_work_dao_api_if_found_in_db() throws IllegalImdbIdGivenException, NotFoundException, AlreadyCreatedException {
+    public void execute_should_not_call_work_dao_api_if_found_in_db() throws IllegalImdbIdGivenException, NotFoundException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Mockito.when(mockUserDao.findById(1L)).thenReturn(new User());
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(new Work());
         sut.execute(1L, "yo");
@@ -69,16 +71,17 @@ class SaveWatchedWorkTest {
     }
 
     @Test
-    public void execute_should_call_work_dao_api_if_not_found_in_db() throws IllegalImdbIdGivenException, NotFoundException, AlreadyCreatedException {
+    public void execute_should_call_work_dao_api_if_not_found_in_db() throws IllegalImdbIdGivenException, NotFoundException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Mockito.when(mockUserDao.findById(1L)).thenReturn(new User());
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(null);
         Mockito.when(mockWorkDaoMovieDbApi.findByImdbId("yo")).thenReturn(new Work());
+        Mockito.when(mockWorkDaoMySql.save(Mockito.any())).thenReturn(new Work());
         sut.execute(1L, "yo");
         Mockito.verify(mockWorkDaoMovieDbApi, Mockito.times(1)).findByImdbId(Mockito.anyString());
     }
 
     @Test
-    public void execute_should_throw_illegal_imdbid_if_not_found_nowhere() throws IllegalImdbIdGivenException, NotFoundException {
+    public void execute_should_throw_illegal_imdbid_if_not_found_nowhere() throws IllegalImdbIdGivenException, NotFoundException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Mockito.when(mockUserDao.findById(1L)).thenReturn(new User());
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(null);
         Mockito.when(mockWorkDaoMovieDbApi.findByImdbId("yo")).thenReturn(null);
@@ -86,7 +89,7 @@ class SaveWatchedWorkTest {
     }
 
     @Test
-    public void execute_should_call_user_work_dao_find_once() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException {
+    public void execute_should_call_user_work_dao_find_once() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Mockito.when(mockUserDao.findById(1L)).thenReturn(new User().setId(1L));
         Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(new Work().setId(2L));
         sut.execute(1L, "yo");
@@ -107,7 +110,7 @@ class SaveWatchedWorkTest {
     }
 
     @Test
-    public void execute_should_call_work_dao_mysql_save_once_if_not_already_save() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException {
+    public void execute_should_call_work_dao_mysql_save_once_if_not_already_save() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Work work = new Work().setId(2L).setImdbId("yo");
         User user = new User().setId(1L);
         UserWork userWork = new UserWork().setWork(work).setUser(user);
@@ -121,7 +124,7 @@ class SaveWatchedWorkTest {
     }
 
     @Test
-    public void execute_should_return_user_work() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException {
+    public void execute_should_return_user_work() throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
         Work work = new Work().setId(2L).setImdbId("yo");
         User user = new User().setId(1L);
         UserWork userWork = new UserWork().setWork(work).setUser(user);
@@ -132,5 +135,32 @@ class SaveWatchedWorkTest {
         Mockito.when(mockUserWorkDaoMySql.save(userWork))
                 .thenReturn(userWork);
         assertEquals(userWork, sut.execute(1L, "yo"));
+    }
+
+    @Test
+    public void execute_should_call_repo_save_work_if_not_exists_in_db() throws NotFoundException, IllegalImdbIdGivenException, AnySearchValueFoundException, TooManySearchArgumentsException, AlreadyCreatedException {
+        Work work = new Work().setId(2L).setImdbId("yo");
+        User user = new User().setId(1L);
+        Mockito.when(mockUserDao.findById(1L)).thenReturn(user);
+        Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(null);
+        Mockito.when(mockWorkDaoMovieDbApi.findByImdbId("yo"))
+                .thenReturn(work);
+        Mockito.when(mockWorkDaoMySql.save(work)).thenReturn(work);
+        sut.execute(1L, "yo");
+        Mockito.verify(mockWorkDaoMySql, Mockito.times(1))
+                .save(work);
+    }
+
+    @Test
+    public void execute_should_not_call_repo_save_work_if_exists_in_db() throws NotFoundException, IllegalImdbIdGivenException, AnySearchValueFoundException, TooManySearchArgumentsException, AlreadyCreatedException {
+        Work work = new Work().setId(2L).setImdbId("yo");
+        User user = new User().setId(1L);
+        Mockito.when(mockUserDao.findById(1L)).thenReturn(user);
+        Mockito.when(mockWorkDaoMySql.findByImdbId("yo")).thenReturn(work);
+        Mockito.when(mockWorkDaoMovieDbApi.findByImdbId("yo"))
+                .thenReturn(work);
+        sut.execute(1L, "yo");
+        Mockito.verify(mockWorkDaoMySql, Mockito.times(0))
+                .save(work);
     }
 }

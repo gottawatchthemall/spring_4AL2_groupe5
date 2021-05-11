@@ -29,5 +29,35 @@ public class WorkMySqlMapper {
                 .setScore(entity.getScore());
     }
 
+    public WorkEntity toEntity(Work work) {
+        return new WorkEntity()
+                .setImdbId(work.getImdbId())
+                .setTitle(work.getTitle())
+                .setYear(work.getYear())
+                .setReleasedDate(work.getReleasedDate())
+                .setDuration(work.getDuration())
+                .setGenres(work.getGenres())
+                .setDirectors(work.getDirectors())
+                .setWriters(work.getWriters())
+                .setActors(work.getActors())
+                .setPlot(work.getPlot())
+                .setCountry(work.getCountry())
+                .setAwards(work.getAwards())
+                .setPoster(work.getPoster())
+                .setMediaId(work.getMedia().getId())
+                .setScore(work.getScore());
+    }
+
+//    private Media getMediaById(Long mediaId) {
+//        Media media = new Media().setId(mediaId);
+//        if (mediaId == 1) {
+//            media.setName("Film");
+//        } else if (mediaId == 2) {
+//            media.setName("Serie");
+//        } else {
+//            media.setName("Episode");
+//        }
+//        return media;
+//    }
 
 }
