@@ -6,7 +6,7 @@ name: Build and deploy JAR app to Azure Web App - media-service-1
 on:
   push:
     branches:
-      - develop
+      - testAzure
   workflow_dispatch:
 
 jobs:
@@ -49,5 +49,5 @@ jobs:
       with:
         app-name: 'media-service-1'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_585eb6d05510437caddceea808d24ca7 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_e6992c538bd943799a4d116579d2a09e }}
         package: '*.jar'
