@@ -1,25 +1,20 @@
 package com.gotta_watch_them_all.app.auth.infrastructure.entrypoint;
 
-import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
-import com.gotta_watch_them_all.app.auth.infrastructure.entrypoint.LoginRequest;
-import com.gotta_watch_them_all.app.auth.infrastructure.entrypoint.SignupRequest;
-import com.gotta_watch_them_all.app.auth.infrastructure.entrypoint.JwtResponse;
-import com.gotta_watch_them_all.app.infrastructure.entrypoint.response.MessageResponse;
 import com.gotta_watch_them_all.app.auth.infrastructure.security.JwtUtils;
 import com.gotta_watch_them_all.app.auth.infrastructure.security.UserDetailsImpl;
 import com.gotta_watch_them_all.app.auth.usecase.SignUp;
+import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
+import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.infrastructure.entrypoint.response.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -66,5 +61,11 @@ public class AuthController {
         );
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(@RequestAttribute(name = "userId") String userId) {
+        var response = String.format("userId : %s", userId);
+        return ResponseEntity.ok(response);
     }
 }
