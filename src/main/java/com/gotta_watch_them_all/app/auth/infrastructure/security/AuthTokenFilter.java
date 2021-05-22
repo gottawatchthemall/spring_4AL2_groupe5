@@ -32,13 +32,14 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                var user = (UserDetailsImpl) authentication.getPrincipal();
+                request.setAttribute("userId", user.getId());
             }
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {1}", e);
