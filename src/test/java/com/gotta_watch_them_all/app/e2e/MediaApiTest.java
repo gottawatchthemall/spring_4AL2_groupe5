@@ -1,12 +1,11 @@
 package com.gotta_watch_them_all.app.e2e;
 
-import com.gotta_watch_them_all.app.helper.AuthHelperData;
-import com.gotta_watch_them_all.app.media.core.MediaDao;
-import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
-import com.gotta_watch_them_all.app.media.core.Media;
-import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
+import com.gotta_watch_them_all.app.media.core.Media;
+import com.gotta_watch_them_all.app.media.core.MediaDao;
 import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.CreateMediaRequest;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,7 @@ public class MediaApiTest {
     @BeforeAll
     void initAll() {
         var adminRole = roleDao.findByRoleName(RoleName.ROLE_ADMIN);
-        var adminHelperData = authHelper.createUserAndGetJwt("username", "user@name.fr", "password", Set.of(adminRole));
+        var adminHelperData = authHelper.createUserAndGetAuthData("username", "user@name.fr", "password", Set.of(adminRole));
         jwtAdmin = adminHelperData.getJwtToken();
     }
 
