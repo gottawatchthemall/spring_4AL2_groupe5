@@ -19,18 +19,20 @@ public class AuthHelper {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    public String createUserAndGetJwt(
+    public AuthHelperData createUserAndGetJwt(
             String username,
             String email,
             String password,
             Set<Role> roles
     ) {
-        userDao.createUser(username, email, password, roles);
+        var userId = userDao.createUser(username, email, password, roles);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return jwtUtils.generateJwtToken(authentication);
+        var jwtToken = jwtUtils.generateJwtToken(authentication);
+        return new AuthHelperData()
+                .setUserId(userId)
+                .setJwtToken(jwtToken);
     }
 }

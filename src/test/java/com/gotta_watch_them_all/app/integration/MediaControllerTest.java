@@ -66,7 +66,8 @@ class MediaControllerTest {
     @BeforeAll
     void initAll() {
         var adminRole = roleDao.findByRoleName(RoleName.ROLE_ADMIN);
-        jwtAdmin = authHelper.createUserAndGetJwt("username", "user@name.fr", "password", Set.of(adminRole));
+        var adminHelperData = authHelper.createUserAndGetJwt("username", "user@name.fr", "password", Set.of(adminRole));
+        jwtAdmin = adminHelperData.getJwtToken();
     }
 
     @DisplayName("GET /api/media")

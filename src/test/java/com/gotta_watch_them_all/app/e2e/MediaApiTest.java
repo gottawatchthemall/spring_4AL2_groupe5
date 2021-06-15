@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.e2e;
 
+import com.gotta_watch_them_all.app.helper.AuthHelperData;
 import com.gotta_watch_them_all.app.media.core.MediaDao;
 import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.media.core.Media;
@@ -47,7 +48,8 @@ public class MediaApiTest {
     @BeforeAll
     void initAll() {
         var adminRole = roleDao.findByRoleName(RoleName.ROLE_ADMIN);
-        jwtAdmin = authHelper.createUserAndGetJwt("username", "user@name.fr", "password", Set.of(adminRole));
+        var adminHelperData = authHelper.createUserAndGetJwt("username", "user@name.fr", "password", Set.of(adminRole));
+        jwtAdmin = adminHelperData.getJwtToken();
     }
 
     @DisplayName("METHOD GET /api/media")
