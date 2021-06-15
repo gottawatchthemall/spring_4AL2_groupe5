@@ -1,6 +1,7 @@
 package com.gotta_watch_them_all.app.integration.banned_word.infrastructure.entrypoint.controller;
 
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
+import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
 import com.gotta_watch_them_all.app.helper.AuthHelperData;
 import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
@@ -11,12 +12,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
 
 import static com.gotta_watch_them_all.app.helper.JsonHelper.objectToJson;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +38,9 @@ class BannedWordControllerTest {
     private RoleDao roleDao;
 
     private AuthHelperData adminHelperData;
+
+    @MockBean
+    private SaveOneBannedWord mockSaveOneBannedWord;
 
     @BeforeAll
     void initAll() {
@@ -75,7 +82,21 @@ class BannedWordControllerTest {
                             .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectToJson(saveBannedWordRequest)))
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void when_request_correct_should_call_usecase_save_one_banned_word() throws Exception {
+            var saveBannedWordRequest = new SaveBannedWordRequest()
+                    .setWord("F word");
+
+            mockMvc.perform(
+                    post("/api/banned-word")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectToJson(saveBannedWordRequest)));
+
+            verify(mockSaveOneBannedWord, times(1)).execute("F word");
         }
     }
 }
