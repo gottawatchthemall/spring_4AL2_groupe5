@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.unit.banned_word.usecase;
 
+import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
@@ -9,8 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SaveOneBannedWordTest {
@@ -26,13 +28,6 @@ class SaveOneBannedWordTest {
     }
 
     @Test
-    void should_check_if_banned_word_already_exists() throws AlreadyCreatedException {
-        sut.execute(wordToBanned);
-
-        verify(mockBannedWordDao, times(1)).existsByWord(wordToBanned);
-    }
-
-    @Test
     void when_word_already_exists_should_throw_already_created_exception() {
         when(mockBannedWordDao.existsByWord(wordToBanned)).thenReturn(true);
 
@@ -45,11 +40,15 @@ class SaveOneBannedWordTest {
     }
 
     @Test
-    void when_word_not_exists_should_save_new_one() throws AlreadyCreatedException {
+    void when_word_saved_should_return_id() throws AlreadyCreatedException {
         when(mockBannedWordDao.existsByWord(wordToBanned)).thenReturn(false);
+        var savedBannedWord = new BannedWord()
+                .setId(65L)
+                .setWord(wordToBanned);
+        when(mockBannedWordDao.save(wordToBanned)).thenReturn(savedBannedWord);
 
-        sut.execute(wordToBanned);
+        var result = sut.execute(wordToBanned);
 
-        verify(mockBannedWordDao, times(1)).save(wordToBanned);
+        assertThat(result).isEqualTo(65L);
     }
 }
