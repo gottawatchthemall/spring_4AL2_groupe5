@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Accessors(chain = true)
 public class BannedWordEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
