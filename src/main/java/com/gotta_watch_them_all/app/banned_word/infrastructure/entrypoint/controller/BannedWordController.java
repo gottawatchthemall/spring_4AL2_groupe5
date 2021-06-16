@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+
+import static org.springframework.http.ResponseEntity.created;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +27,12 @@ public class BannedWordController {
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<URI> saveBlacklistedWord(@Valid @RequestBody SaveBannedWordRequest request) {
-        saveOneBannedWord.execute(request.getWord());
-        return null;
+        var bannedWordId = saveOneBannedWord.execute(request.getWord());
+
+        var uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(bannedWordId)
+                .toUri();
+        return created(uri).build();
     }
 }

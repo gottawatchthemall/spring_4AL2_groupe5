@@ -2,6 +2,7 @@ package com.gotta_watch_them_all.app.integration.banned_word.infrastructure.entr
 
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
+import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
 import com.gotta_watch_them_all.app.helper.AuthHelperData;
 import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
@@ -15,12 +16,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Set;
 
 import static com.gotta_watch_them_all.app.helper.JsonHelper.objectToJson;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,7 +70,7 @@ class BannedWordControllerTest {
                     post("/api/banned-word")
                             .header("Authorization", "Bearer " + userAuthHelper.getJwtToken())
             )
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isBadRequest());
         }
 
         @ParameterizedTest
@@ -97,6 +99,43 @@ class BannedWordControllerTest {
                             .content(objectToJson(saveBannedWordRequest)));
 
             verify(mockSaveOneBannedWord, times(1)).execute("F word");
+        }
+
+        @Test
+        void when_usecase_throw_already_created_exception_should_send_forbidden_error_response() throws Exception {
+            var saveBannedWordRequest = new SaveBannedWordRequest()
+                    .setWord("F word");
+            when(mockSaveOneBannedWord.execute("F word")).thenThrow(new AlreadyCreatedException("already created"));
+
+            mockMvc.perform(
+                    post("/api/banned-word")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectToJson(saveBannedWordRequest)))
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void when_usecase_return_id_should_return_created_success_response_with_uri() throws Exception {
+            var saveBannedWordRequest = new SaveBannedWordRequest()
+                    .setWord("F word");
+            when(mockSaveOneBannedWord.execute("F word")).thenReturn(31L);
+
+            var location = mockMvc.perform(
+                    post("/api/banned-word")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectToJson(saveBannedWordRequest)))
+                    .andExpect(status().isCreated())
+                    .andReturn()
+                    .getResponse()
+                    .getHeader("Location");
+
+            var response = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/api/banned-word/{id}")
+                    .buildAndExpand(31L)
+                    .toUri();
+            assertThat(location).isEqualTo(response.toString());
         }
     }
 }
