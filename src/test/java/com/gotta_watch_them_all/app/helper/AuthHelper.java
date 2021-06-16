@@ -1,8 +1,8 @@
 package com.gotta_watch_them_all.app.helper;
 
-import com.gotta_watch_them_all.app.user.core.dao.UserDao;
-import com.gotta_watch_them_all.app.role.core.entity.Role;
 import com.gotta_watch_them_all.app.auth.infrastructure.security.JwtUtils;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,18 +19,20 @@ public class AuthHelper {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
-    public String createUserAndGetJwt(
+    public AuthHelperData createUserAndGetAuthData(
             String username,
             String email,
             String password,
             Set<Role> roles
     ) {
-        userDao.createUser(username, email, password, roles);
+        var userId = userDao.createUser(username, email, password, roles);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, password)
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return jwtUtils.generateJwtToken(authentication);
+        var jwtToken = jwtUtils.generateJwtToken(authentication);
+        return new AuthHelperData()
+                .setUserId(userId)
+                .setJwtToken(jwtToken);
     }
 }

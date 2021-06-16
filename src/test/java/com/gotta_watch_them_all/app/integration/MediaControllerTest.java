@@ -1,18 +1,18 @@
 package com.gotta_watch_them_all.app.integration;
 
-import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
-import com.gotta_watch_them_all.app.media.core.Media;
-import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
-import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.MediaAdapter;
+import com.gotta_watch_them_all.app.media.core.Media;
 import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.CreateMediaRequest;
+import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.MediaAdapter;
 import com.gotta_watch_them_all.app.media.infrastructure.entrypoint.MediaResponse;
 import com.gotta_watch_them_all.app.media.usecase.AddMedia;
 import com.gotta_watch_them_all.app.media.usecase.DeleteMedia;
 import com.gotta_watch_them_all.app.media.usecase.FindAllMedias;
 import com.gotta_watch_them_all.app.media.usecase.FindMediaById;
+import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.RoleName;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -66,7 +66,8 @@ class MediaControllerTest {
     @BeforeAll
     void initAll() {
         var adminRole = roleDao.findByRoleName(RoleName.ROLE_ADMIN);
-        jwtAdmin = authHelper.createUserAndGetJwt("username", "user@name.fr", "password", Set.of(adminRole));
+        var adminHelperData = authHelper.createUserAndGetAuthData("username", "user@name.fr", "password", Set.of(adminRole));
+        jwtAdmin = adminHelperData.getJwtToken();
     }
 
     @DisplayName("GET /api/media")
