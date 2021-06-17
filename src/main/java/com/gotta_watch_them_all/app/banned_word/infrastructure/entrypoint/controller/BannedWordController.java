@@ -20,8 +20,7 @@ import javax.validation.constraints.Min;
 import java.net.URI;
 import java.util.Set;
 
-import static org.springframework.http.ResponseEntity.created;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @Validated
@@ -68,6 +67,6 @@ public class BannedWordController {
             @Min(value = 1, message = "id has to be equal or more than 1") Long bannedWordId
     ) throws NotFoundException {
         deleteBannedWordById.execute(bannedWordId);
-        return null;
+        return noContent().build();
     }
 }

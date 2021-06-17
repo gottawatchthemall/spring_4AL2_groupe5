@@ -305,5 +305,25 @@ class BannedWordControllerTest {
 
             verify(mockDeleteBannedWordById, times(1)).execute(76L);
         }
+
+        @Test
+        void when_usecase_throw_not_found_exception_should_send_not_found_error_response() throws Exception {
+            doThrow(new NotFoundException("not found")).when(mockDeleteBannedWordById).execute(76L);
+
+            mockMvc.perform(
+                    delete("/api/banned-word/76")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            ).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void when_usecase_do_nothing_should_send_not_content_success_response() throws Exception {
+            doNothing().when(mockDeleteBannedWordById).execute(76L);
+
+            mockMvc.perform(
+                    delete("/api/banned-word/76")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            ).andExpect(status().isNoContent());
+        }
     }
 }
