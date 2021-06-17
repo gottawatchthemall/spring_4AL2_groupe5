@@ -2,6 +2,7 @@ package com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.contr
 
 import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
+import com.gotta_watch_them_all.app.banned_word.usecase.DeleteBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindAllBannedWords;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
@@ -30,6 +31,7 @@ public class BannedWordController {
     private final SaveOneBannedWord saveOneBannedWord;
     private final FindOneBannedWordById findOneBannedWordById;
     private final FindAllBannedWords findAllBannedWords;
+    private final DeleteBannedWordById deleteBannedWordById;
 
     @SneakyThrows
     @PostMapping
@@ -57,5 +59,15 @@ public class BannedWordController {
     public ResponseEntity<Set<BannedWord>> findAll() {
         var setBannedWord = findAllBannedWords.execute();
         return ok(setBannedWord);
+    }
+
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteById(
+            @PathVariable("id")
+            @Min(value = 1, message = "id has to be equal or more than 1") Long bannedWordId
+    ) throws NotFoundException {
+        deleteBannedWordById.execute(bannedWordId);
+        return null;
     }
 }

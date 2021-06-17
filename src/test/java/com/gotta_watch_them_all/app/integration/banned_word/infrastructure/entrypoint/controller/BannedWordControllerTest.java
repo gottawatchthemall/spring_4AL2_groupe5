@@ -2,6 +2,7 @@ package com.gotta_watch_them_all.app.integration.banned_word.infrastructure.entr
 
 import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
+import com.gotta_watch_them_all.app.banned_word.usecase.DeleteBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindAllBannedWords;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
@@ -30,8 +31,7 @@ import static com.gotta_watch_them_all.app.helper.JsonHelper.jsonToObject;
 import static com.gotta_watch_them_all.app.helper.JsonHelper.objectToJson;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -59,6 +59,9 @@ class BannedWordControllerTest {
 
     @MockBean
     private FindAllBannedWords mockFindAllBannedWords;
+
+    @MockBean
+    private DeleteBannedWordById mockDeleteBannedWordById;
 
     @BeforeAll
     void initAll() {
@@ -263,6 +266,44 @@ class BannedWordControllerTest {
             assertThat(bannedWords.length).isGreaterThan(0);
             var result = new HashSet<>(Arrays.asList(bannedWords));
             assertThat(result).isEqualTo(setBannedWords);
+        }
+    }
+
+    @DisplayName("DELETE /api/banned-word/{id}")
+    @Nested
+    class DeleteByIdTest {
+        @Test
+        void when_user_not_authorized_should_send_unauthorized_error_response() throws Exception {
+            mockMvc.perform(
+                    delete("/api/banned-word/123")
+            ).andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void when_user_is_not_admin_should_send_forbidden_error_response() throws Exception {
+            mockMvc.perform(
+                    delete("/api/banned-word/123")
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            ).andExpect(status().isForbidden());
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"notnumber", "-2", "3.6", "0"})
+        void when_banned_word_id_is_incorrect_should_send_bad_request_response(String incorrectBannedWord) throws Exception {
+            mockMvc.perform(
+                    delete("/api/banned-word/" + incorrectBannedWord)
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            ).andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void when_banned_word_id_is_correct_should_call_usecase_deleteBannedWordById() throws Exception {
+            mockMvc.perform(
+                    delete("/api/banned-word/76")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            );
+
+            verify(mockDeleteBannedWordById, times(1)).execute(76L);
         }
     }
 }

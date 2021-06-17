@@ -50,4 +50,14 @@ public class BannedWordDaoMySql implements BannedWordDao {
                 .map(bannedWordMapper::toDomain)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Boolean existsById(Long bannedWordId) {
+        return bannedWordRepository.existsById(bannedWordId);
+    }
+
+    @Override
+    public void deleteById(Long bannedWordId) {
+        bannedWordRepository.deleteById(bannedWordId);
+    }
 }
