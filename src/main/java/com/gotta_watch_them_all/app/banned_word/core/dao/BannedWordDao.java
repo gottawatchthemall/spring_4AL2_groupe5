@@ -13,4 +13,8 @@ public interface BannedWordDao {
     BannedWord findById(Long bannedWordId) throws NotFoundException;
 
     Set<BannedWord> findAll();
+
+    Boolean existsById(Long bannedWordId);
+
+    void deleteById(Long bannedWordId);
 }
