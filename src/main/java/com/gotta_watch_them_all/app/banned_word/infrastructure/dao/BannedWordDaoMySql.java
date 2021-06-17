@@ -5,6 +5,7 @@ import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.dataprovider.entity.BannedWordEntity;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.dataprovider.mapper.BannedWordMapper;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.dataprovider.repository.BannedWordRepository;
+import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +26,18 @@ public class BannedWordDaoMySql implements BannedWordDao {
                 .setWord(word);
         var savedBannedWord = bannedWordRepository.save(bannedWordToSave);
         return bannedWordMapper.toDomain(savedBannedWord);
+    }
+
+    @Override
+    public BannedWord findById(Long bannedWordId) throws NotFoundException {
+        return bannedWordRepository.findById(bannedWordId)
+                .map(bannedWordMapper::toDomain)
+                .orElseThrow(() -> {
+                    var message = String.format(
+                            "Banned word with id '%d' not found",
+                            bannedWordId
+                    );
+                    return new NotFoundException(message);
+                });
     }
 }

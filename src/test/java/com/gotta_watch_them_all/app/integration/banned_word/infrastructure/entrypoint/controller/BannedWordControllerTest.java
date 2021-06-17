@@ -1,8 +1,11 @@
 package com.gotta_watch_them_all.app.integration.banned_word.infrastructure.entrypoint.controller;
 
+import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
+import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
+import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
 import com.gotta_watch_them_all.app.helper.AuthHelperData;
 import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
@@ -20,9 +23,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Set;
 
+import static com.gotta_watch_them_all.app.helper.JsonHelper.jsonToObject;
 import static com.gotta_watch_them_all.app.helper.JsonHelper.objectToJson;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,13 +46,21 @@ class BannedWordControllerTest {
 
     private AuthHelperData adminHelperData;
 
+    private AuthHelperData userHelperData;
+
     @MockBean
     private SaveOneBannedWord mockSaveOneBannedWord;
+
+    @MockBean
+    private FindOneBannedWordById mockFindOneBannedWordById;
 
     @BeforeAll
     void initAll() {
         var adminRole = roleDao.findByRoleName(RoleName.ROLE_ADMIN);
         adminHelperData = authHelper.createUserAndGetAuthData("adminName", "admin@name.fr", "adminPassword", Set.of(adminRole));
+        var userRole = roleDao.findByRoleName(RoleName.ROLE_USER);
+        userHelperData = authHelper
+                .createUserAndGetAuthData("username", "user@name.fr", "password", Set.of(userRole));
     }
 
     @DisplayName("POST /api/banned-word")
@@ -63,12 +76,9 @@ class BannedWordControllerTest {
 
         @Test
         void when_user_is_not_admin_should_send_forbidden_error_response() throws Exception {
-            var userRole = roleDao.findByRoleName(RoleName.ROLE_USER);
-            var userAuthHelper = authHelper
-                    .createUserAndGetAuthData("username", "user@name.fr", "password", Set.of(userRole));
             mockMvc.perform(
                     post("/api/banned-word")
-                            .header("Authorization", "Bearer " + userAuthHelper.getJwtToken())
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
             )
                     .andExpect(status().isBadRequest());
         }
@@ -136,6 +146,67 @@ class BannedWordControllerTest {
                     .buildAndExpand(31L)
                     .toUri();
             assertThat(location).isEqualTo(response.toString());
+        }
+    }
+
+    @DisplayName("GET /api/banned-word/{id}")
+    @Nested
+    class FindByIdTest {
+        @Test
+        void when_user_not_authenticate_should_send_unauthorized_error_response() throws Exception {
+            mockMvc.perform(
+                    get("/api/banned-word/32")
+            )
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"notnumber", "-1", "2.3", "0"})
+        void when_id_is_incorrect_should_send_bad_request_error_response(String incorrectId) throws Exception {
+            mockMvc.perform(
+                    get("/api/banned-word/" + incorrectId)
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            )
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        void when_id_correct_should_call_usecase_findOneBannedWordById() throws Exception {
+            mockMvc.perform(
+                    get("/api/banned-word/34")
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            );
+
+            verify(mockFindOneBannedWordById, times(1)).execute(34L);
+        }
+
+        @Test
+        void when_usecase_findOneBannedWordById_throw_NotFoundException_should_send_not_found_error_response() throws Exception {
+            when(mockFindOneBannedWordById.execute(34L)).thenThrow(new NotFoundException("not found"));
+            mockMvc.perform(
+                    get("/api/banned-word/34")
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            ).andExpect(status().isNotFound());
+        }
+
+        @Test
+        void when_usecase_findOneBannedWordById_return_banned_word_should_return_found_banned_word() throws Exception {
+            var bannedWord = new BannedWord()
+                    .setId(34L)
+                    .setWord("banned word");
+            when(mockFindOneBannedWordById.execute(34L)).thenReturn(bannedWord);
+
+            var contentAsString = mockMvc.perform(
+                    get("/api/banned-word/34")
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            ).andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+
+            var result = jsonToObject(contentAsString, BannedWord.class);
+
+            assertThat(result).isEqualTo(bannedWord);
         }
     }
 }
