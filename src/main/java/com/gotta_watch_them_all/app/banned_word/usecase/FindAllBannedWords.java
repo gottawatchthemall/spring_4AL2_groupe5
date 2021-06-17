@@ -11,7 +11,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class FindAllBannedWords {
     private final BannedWordDao bannedWordDao;
-
     public Set<BannedWord> execute() {
         return bannedWordDao.findAll();
     }
