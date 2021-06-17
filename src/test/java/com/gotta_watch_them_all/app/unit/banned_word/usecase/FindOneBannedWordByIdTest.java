@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.unit.banned_word.usecase;
 
+import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FindOneBannedWordByIdTest {
@@ -30,5 +31,17 @@ class FindOneBannedWordByIdTest {
         sut.execute(bannedWordId);
 
         verify(mockBannedWordDao, times(1)).findById(bannedWordId);
+    }
+
+    @Test
+    void when_banned_word_found_should_return_banned_word() throws NotFoundException {
+        var bannedWord = new BannedWord()
+                .setId(bannedWordId)
+                .setWord("banned_word");
+        when(mockBannedWordDao.findById(bannedWordId)).thenReturn(bannedWord);
+
+        var result = sut.execute(bannedWordId);
+
+        assertThat(result).isEqualTo(bannedWord);
     }
 }

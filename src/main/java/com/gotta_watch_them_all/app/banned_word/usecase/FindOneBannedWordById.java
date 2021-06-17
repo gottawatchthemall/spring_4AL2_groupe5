@@ -12,7 +12,6 @@ public class FindOneBannedWordById {
     private final BannedWordDao bannedWordDao;
 
     public BannedWord execute(Long bannedWordId) throws NotFoundException {
-        bannedWordDao.findById(bannedWordId);
-        return null;
+        return bannedWordDao.findById(bannedWordId);
     }
 }
