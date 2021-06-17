@@ -2,6 +2,7 @@ package com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.contr
 
 import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
+import com.gotta_watch_them_all.app.banned_word.usecase.FindAllBannedWords;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.net.URI;
+import java.util.Set;
 
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
@@ -27,6 +29,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class BannedWordController {
     private final SaveOneBannedWord saveOneBannedWord;
     private final FindOneBannedWordById findOneBannedWordById;
+    private final FindAllBannedWords findAllBannedWords;
 
     @SneakyThrows
     @PostMapping
@@ -48,5 +51,11 @@ public class BannedWordController {
     ) throws NotFoundException {
         var foundBannedWord = findOneBannedWordById.execute(bannedWordId);
         return ok(foundBannedWord);
+    }
+
+    @GetMapping
+    public ResponseEntity<Set<BannedWord>> findAll() {
+        var setBannedWord = findAllBannedWords.execute();
+        return ok(setBannedWord);
     }
 }

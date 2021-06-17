@@ -9,6 +9,9 @@ import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class BannedWordDaoMySql implements BannedWordDao {
@@ -39,5 +42,12 @@ public class BannedWordDaoMySql implements BannedWordDao {
                     );
                     return new NotFoundException(message);
                 });
+    }
+
+    @Override
+    public Set<BannedWord> findAll() {
+        return bannedWordRepository.findAll().stream()
+                .map(bannedWordMapper::toDomain)
+                .collect(Collectors.toSet());
     }
 }

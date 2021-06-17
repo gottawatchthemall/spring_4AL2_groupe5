@@ -2,6 +2,7 @@ package com.gotta_watch_them_all.app.integration.banned_word.infrastructure.entr
 
 import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.infrastructure.entrypoint.request.SaveBannedWordRequest;
+import com.gotta_watch_them_all.app.banned_word.usecase.FindAllBannedWords;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
 import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
@@ -21,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.gotta_watch_them_all.app.helper.JsonHelper.jsonToObject;
@@ -53,6 +56,9 @@ class BannedWordControllerTest {
 
     @MockBean
     private FindOneBannedWordById mockFindOneBannedWordById;
+
+    @MockBean
+    private FindAllBannedWords mockFindAllBannedWords;
 
     @BeforeAll
     void initAll() {
@@ -207,6 +213,56 @@ class BannedWordControllerTest {
             var result = jsonToObject(contentAsString, BannedWord.class);
 
             assertThat(result).isEqualTo(bannedWord);
+        }
+    }
+
+    @DisplayName("GET /api/banned-word")
+    @Nested
+    class FindAllTest {
+        @Test
+        void when_user_not_authenticate_should_unauthorized_error_response() throws Exception {
+            mockMvc.perform(
+                    get("/api/banned-word")
+            )
+                    .andExpect(status().isUnauthorized());
+        }
+
+        @Test
+        void when_user_authenticate_should_call_usecase_findAllBannedWords() throws Exception {
+            mockMvc.perform(
+                    get("/api/banned-word")
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            );
+
+            verify(mockFindAllBannedWords, times(1)).execute();
+        }
+
+        @Test
+        void when_usecase_return_set_banned_words_should_send_ok_response_with_set_banned_words() throws Exception {
+            var setBannedWords = Set.of(
+                    new BannedWord()
+                            .setId(23L)
+                            .setWord("bannedWord23"),
+                    new BannedWord()
+                            .setId(56L)
+                            .setWord("bannedWord56")
+            );
+            when(mockFindAllBannedWords.execute()).thenReturn(setBannedWords);
+
+            var contentAsString = mockMvc.perform(
+                    get("/api/banned-word")
+                            .header("Authorization", "Bearer " + userHelperData.getJwtToken())
+            ).andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+
+            assertThat(contentAsString).isNotBlank();
+            var bannedWords = jsonToObject(contentAsString, BannedWord[].class);
+            assertThat(bannedWords).isNotNull();
+            assertThat(bannedWords.length).isGreaterThan(0);
+            var result = new HashSet<>(Arrays.asList(bannedWords));
+            assertThat(result).isEqualTo(setBannedWords);
         }
     }
 }
