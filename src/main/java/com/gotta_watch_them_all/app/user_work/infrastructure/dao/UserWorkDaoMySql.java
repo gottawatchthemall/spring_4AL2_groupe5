@@ -30,6 +30,11 @@ public class UserWorkDaoMySql implements UserWorkDao {
     }
 
     @Override
+    public void delete(UserWork userWork) {
+        userWorkRepository.delete(mapper.toEntity(userWork));
+    }
+
+    @Override
     public UserWork findById(Long userId, Long workId) {
         checkIfUserWorkExists(userId, workId);
         var user = userDao.findById(userId);

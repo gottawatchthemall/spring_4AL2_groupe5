@@ -37,7 +37,8 @@ public class WorkDaoMySql implements WorkDao {
 
     @Override
     public Work findById(Long id) {
-        return null;
+        final var work = workRepository.findById(id);
+        return work.map(workMySqlMapper::toDomain).orElse(null);
     }
 
     @Override
