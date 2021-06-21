@@ -30,7 +30,7 @@ public class UserWorkDaoMySql implements UserWorkDao {
     }
 
     @Override
-    public UserWork findById(Long userId, Long workId) throws NotFoundException {
+    public UserWork findById(Long userId, Long workId) {
         checkIfUserWorkExists(userId, workId);
         var user = userDao.findById(userId);
         var work = workDao.findById(workId);
@@ -40,7 +40,7 @@ public class UserWorkDaoMySql implements UserWorkDao {
                 .setWork(work);
     }
 
-    private void checkIfUserWorkExists(Long userId, Long workId) throws NotFoundException {
+    private void checkIfUserWorkExists(Long userId, Long workId) {
         var userWorkEntity = userWorkRepository.findByUserIdAndWorkId(userId, workId);
         if (userWorkEntity == null) {
             throw new NotFoundException(String.format("UserWork with user id %s and work id %s does not exists",

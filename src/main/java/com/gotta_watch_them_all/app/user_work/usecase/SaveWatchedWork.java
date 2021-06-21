@@ -9,9 +9,7 @@ import com.gotta_watch_them_all.app.user_work.core.dao.UserWorkDao;
 import com.gotta_watch_them_all.app.user_work.core.entity.UserWork;
 import com.gotta_watch_them_all.app.work.core.dao.WorkDao;
 import com.gotta_watch_them_all.app.work.core.entity.Work;
-import com.gotta_watch_them_all.app.work.core.exception.AnySearchValueFoundException;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalImdbIdGivenException;
-import com.gotta_watch_them_all.app.work.core.exception.TooManySearchArgumentsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -30,7 +28,7 @@ public class SaveWatchedWork {
 
     private final UserWorkDao userWorkDao;
 
-    public UserWork execute(Long userId, String imdbId) throws NotFoundException, IllegalImdbIdGivenException, AlreadyCreatedException, AnySearchValueFoundException, TooManySearchArgumentsException {
+    public UserWork execute(Long userId, String imdbId) {
         var user = findUserById(userId);
         var work = findWorkByImdbId(imdbId);
 
@@ -40,7 +38,7 @@ public class SaveWatchedWork {
         return userWorkDao.save(newUserWork);
     }
 
-    private void checkIfUserWorkAlreadyExists(Long userId, Long workId) throws AlreadyCreatedException {
+    private void checkIfUserWorkAlreadyExists(Long userId, Long workId) {
         UserWork userWorkAlreadyExists = null;
         try {
             userWorkAlreadyExists = userWorkDao.findById(userId, workId);
@@ -52,7 +50,7 @@ public class SaveWatchedWork {
         }
     }
 
-    private User findUserById(Long userId) throws NotFoundException {
+    private User findUserById(Long userId) {
         var user = userDao.findById(userId);
         if (user == null) {
             throw new NotFoundException(String.format("User with id %s does not exists", userId));
@@ -60,12 +58,9 @@ public class SaveWatchedWork {
         return user;
     }
 
-    private Work findWorkByImdbId(String imdbId) throws IllegalImdbIdGivenException, NotFoundException, AnySearchValueFoundException, TooManySearchArgumentsException {
-        Work work = null;
-        try {
-            work = workDaoMySql.findByImdbId(imdbId);
-        } catch (IllegalImdbIdGivenException | NotFoundException ignored) {
-        }
+    private Work findWorkByImdbId(String imdbId) {
+
+        Work work = workDaoMySql.findByImdbId(imdbId);
 
         if (work == null) {
             work = workDaoMovieDbApi.findByImdbId(imdbId);

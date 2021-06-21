@@ -12,11 +12,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserDaoImpl implements UserDao {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
@@ -43,7 +45,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findById(Long userId) throws NotFoundException {
+    public User findById(Long userId) {
         if (userId == null) throw new NotFoundException("UserId should not be null");
         var userEntity = userRepository.findById(userId);
         if (userEntity.isEmpty()) throw new NotFoundException(String.format("User with id %s does not exists", userId));

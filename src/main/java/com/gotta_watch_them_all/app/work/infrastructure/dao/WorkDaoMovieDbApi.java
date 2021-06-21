@@ -30,20 +30,17 @@ public class WorkDaoMovieDbApi implements WorkDao {
 
     @Override
     public Set<Work> findAllByTitle(String title) {
-        try {
-            HttpRequest request = apiRequestBuilder
-                    .setTitleToSearch(title)
-                    .build();
-            String jsonRaw = apiRequester.request(request);
-            SearchMovieDbEntity search = jsonParser.toObject(jsonRaw, SearchMovieDbEntity.class);
+        HttpRequest request = apiRequestBuilder
+                .setTitleToSearch(title)
+                .build();
+        String jsonRaw = apiRequester.request(request);
+        SearchMovieDbEntity search = jsonParser.toObject(jsonRaw, SearchMovieDbEntity.class);
 
-            return search.getWorkMovieDbApiEntities()
-                    .stream()
-                    .map(mapper::toBasicDomain)
-                    .collect(Collectors.toSet());
-        } catch (AnySearchValueFoundException | IllegalTitleGivenException | BadHttpRequestException | TooManySearchArgumentsException e) {
-            return null;
-        }
+        return search.getWorkMovieDbApiEntities()
+                .stream()
+                .map(mapper::toBasicDomain)
+                .collect(Collectors.toSet());
+
     }
 
     @Override
@@ -52,23 +49,20 @@ public class WorkDaoMovieDbApi implements WorkDao {
     }
 
     @Override
-    public Work findByImdbId(String imdbId) throws IllegalImdbIdGivenException, AnySearchValueFoundException, TooManySearchArgumentsException {
+    public Work findByImdbId(String imdbId) {
         var request = apiRequestBuilder
                 .setWorkIdToSearch(imdbId)
                 .build();
-        try {
-            var jsonRaw = apiRequester.request(request);
-            if (jsonRaw.contains("Error")) {
-                throw new IllegalImdbIdGivenException(String.format("Wrong imdbId %s", imdbId));
-            }
-            var entity = jsonParser.toObject(jsonRaw, WorkMovieDbApiEntity.class);
-            if (!entity.getImdbID().equalsIgnoreCase(imdbId)) {
-                throw new IllegalImdbIdGivenException(String.format("Wrong imdbId %s", imdbId));
-            }
-            return mapper.toFullDomain(entity);
-        } catch (BadHttpRequestException ignored) {
+
+        var jsonRaw = apiRequester.request(request);
+        if (jsonRaw.contains("Error")) {
+            throw new IllegalImdbIdGivenException(String.format("Wrong imdbId %s", imdbId));
         }
-        return null;
+        var entity = jsonParser.toObject(jsonRaw, WorkMovieDbApiEntity.class);
+        if (!entity.getImdbID().equalsIgnoreCase(imdbId)) {
+            throw new IllegalImdbIdGivenException(String.format("Wrong imdbId %s", imdbId));
+        }
+        return mapper.toFullDomain(entity);
     }
 
     @Override

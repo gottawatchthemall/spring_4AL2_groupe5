@@ -23,8 +23,8 @@ public class WorkController {
     @GetMapping("/moviedb/{title}")
     public ResponseEntity<Set<WorkByTitleResponse>> findByTitle(
             @PathVariable("title") String title
-    ) throws NotFoundException, IllegalTitleGivenException {
-        var works = findWorkByTitleFromApi.execute(title);
+    ) {
+        final var works = findWorkByTitleFromApi.execute(title);
         return ok(WorkAdapter.domainToTitleResponseSet(works));
     }
 

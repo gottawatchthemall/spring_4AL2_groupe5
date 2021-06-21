@@ -41,7 +41,7 @@ public class WorkDaoMySql implements WorkDao {
     }
 
     @Override
-    public Work findByImdbId(String imdbId) throws IllegalImdbIdGivenException, NotFoundException {
+    public Work findByImdbId(String imdbId) {
         if (imdbId == null || imdbId.isBlank()) {
             throw new IllegalImdbIdGivenException("ImdbId can not be null or empty");
         }

@@ -26,7 +26,7 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     private String apiHost;
 
     @Override
-    public HttpRequest build() throws AnySearchValueFoundException, TooManySearchArgumentsException {
+    public HttpRequest build() {
         setUri();
         return HttpRequest
                 .newBuilder()
@@ -37,7 +37,7 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     }
 
     @Override
-    public ApiRequestBuilderMovieDb setUri() throws AnySearchValueFoundException, TooManySearchArgumentsException {
+    public ApiRequestBuilderMovieDb setUri() {
         checkSearchExceptions();
 
         String url = String.format("https://%s", apiHost);
@@ -51,7 +51,7 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
         return this;
     }
 
-    private void checkSearchExceptions() throws AnySearchValueFoundException, TooManySearchArgumentsException {
+    private void checkSearchExceptions() {
         if (titleToSearch == null && imdbIdToSearch == null) {
             throw new AnySearchValueFoundException("A searching criteria must be defined");
         }
@@ -61,7 +61,7 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     }
 
     @Override
-    public ApiRequestBuilderMovieDb setTitleToSearch(String title) throws IllegalTitleGivenException {
+    public ApiRequestBuilderMovieDb setTitleToSearch(String title) {
         if (title == null) throw new IllegalTitleGivenException("Title to search can not be null");
         if (title.isBlank()) throw new IllegalTitleGivenException("Title to search can not be empty");
         titleToSearch = title;
@@ -69,7 +69,7 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     }
 
     @Override
-    public ApiRequestBuilder setWorkIdToSearch(String id) throws IllegalImdbIdGivenException {
+    public ApiRequestBuilder setWorkIdToSearch(String id) {
         if (id == null || id.isBlank()) {
             throw new IllegalImdbIdGivenException("ImdbId can not be null or blank");
         }

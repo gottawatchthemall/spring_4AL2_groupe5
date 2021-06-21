@@ -15,7 +15,7 @@ public class ApiRequester {
 
     private final HttpClient httpClient;
 
-    public String request(HttpRequest request) throws BadHttpRequestException {
+    public String request(HttpRequest request) {
         if (request == null || request.uri() == null) {
             throw new BadHttpRequestException("URI of http request is null");
         }

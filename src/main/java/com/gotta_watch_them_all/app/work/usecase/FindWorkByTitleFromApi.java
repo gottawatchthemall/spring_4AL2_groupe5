@@ -17,7 +17,7 @@ public class FindWorkByTitleFromApi {
     @Qualifier("movieDbApiDao")
     private final WorkDao workDao;
 
-    public Set<Work> execute(String title) throws NotFoundException, IllegalTitleGivenException {
+    public Set<Work> execute(String title) {
         if (title == null || title.isBlank()) {
             throw new IllegalTitleGivenException("Title to search should not be null or empty");
         }
