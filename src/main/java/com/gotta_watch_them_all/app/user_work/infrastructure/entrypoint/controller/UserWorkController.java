@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.user_work.infrastructure.entrypoint.controller;
 
+import com.gotta_watch_them_all.app.user_work.usecase.FindWatchedWork;
 import com.gotta_watch_them_all.app.user_work.usecase.FindWorksWatchedByOneUser;
 import com.gotta_watch_them_all.app.user_work.usecase.RemoveWatchedWork;
 import com.gotta_watch_them_all.app.user_work.usecase.SaveWatchedWork;
@@ -14,39 +15,56 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/watched")
 public class UserWorkController {
 
     private final SaveWatchedWork saveWatchedWork;
+    private final FindWatchedWork findWatchedWork;
     private final RemoveWatchedWork removeWatchedWork;
     private final FindWorksWatchedByOneUser findWorksWatchedByOneUser;
 
-    @PostMapping("/users/{userId}/works/{workId}")
+    @PutMapping("/works/{workId}")
     public ResponseEntity<?> saveWatchedWork(
-            @PathVariable("userId")
-            @Min(value = 1, message = "id has to be equal or more than 1") Long userId,
             @PathVariable("workId")
-            @NotBlank(message = "id has to be") String workId
+            @NotBlank(message = "id has to be") String workId,
+            @RequestAttribute("userId") String userId
     ) {
-        var newUserWork = saveWatchedWork.execute(userId, workId);
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/users/{userId}/works/{workId}")
+        final var newUserWork = saveWatchedWork.execute(Long.valueOf(userId), workId);
+
+        final var uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/watched/works/{workId}")
                 .buildAndExpand(
-                        Map.of("userId", newUserWork.getUser().getId(),
-                                "workId", newUserWork.getWork().getId()))
+                        Map.of("workId", newUserWork.getWork().getId()))
                 .toUri();
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(newUserWork);
     }
 
-    @DeleteMapping("/users/{userId}/works/{workId}")
+    @DeleteMapping("/works/{workId}")
     public ResponseEntity<?> removeWatchedWork(
-            @PathVariable("userId")
-            @Min(value = 1, message = "id has to be equal or more than 1") Long userId,
+            @RequestAttribute("userId") String userId,
             @PathVariable("workId")
             @Min(value = 1, message = "id has to be equal or more than 1") Long workId
     ) {
-        removeWatchedWork.execute(userId, workId);
+        removeWatchedWork.execute(Long.valueOf(userId), workId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/works")
+    public ResponseEntity<?> getWatchedWorkByCurrentUser(
+            @RequestAttribute("userId") String userId
+    ) {
+        final var works = findWorksWatchedByOneUser.execute(Long.valueOf(userId));
+        return ResponseEntity.ok(works);
+    }
+
+    @GetMapping("/works/{workId}")
+    public ResponseEntity<?> getWatchedWorkById(
+            @RequestAttribute("userId") String userId,
+            @PathVariable("workId")
+            @Min(value = 1, message = "id has to be equal or more than 1") Long workId
+    ) {
+        final var work = findWatchedWork.execute(Long.valueOf(userId), workId);
+        return ResponseEntity.ok(work);
     }
 
     @GetMapping("/users/{userId}/works")

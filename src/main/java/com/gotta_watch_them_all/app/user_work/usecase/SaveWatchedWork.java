@@ -35,7 +35,8 @@ public class SaveWatchedWork {
         checkIfUserWorkAlreadyExists(userId, work.getId());
 
         UserWork newUserWork = new UserWork().setWork(work).setUser(user);
-        return userWorkDao.save(newUserWork);
+        userWorkDao.save(newUserWork);
+        return newUserWork;
     }
 
     private void checkIfUserWorkAlreadyExists(Long userId, Long workId) {
