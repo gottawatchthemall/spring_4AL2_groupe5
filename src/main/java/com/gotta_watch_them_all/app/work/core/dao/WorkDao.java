@@ -8,6 +8,8 @@ import java.util.Set;
 public interface WorkDao {
     Set<Work> findAllByTitle(String title);
 
+    Set<Work> findAllByIds(Set<Long> ids);
+
     Work findById(Long id);
 
     Work findByImdbId(String imdbId);

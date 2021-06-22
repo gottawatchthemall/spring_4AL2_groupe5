@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.net.http.HttpRequest;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,11 @@ public class WorkDaoMySql implements WorkDao {
     @Override
     public Set<Work> findAllByTitle(String title) {
         return null;
+    }
+
+    @Override
+    public Set<Work> findAllByIds(Set<Long> ids) {
+        return new HashSet<>(workMySqlMapper.toDomainList(workRepository.findAllById(ids)));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.user_work.infrastructure.entrypoint.controller;
 
+import com.gotta_watch_them_all.app.user_work.usecase.FindWorksWatchedByOneUser;
 import com.gotta_watch_them_all.app.user_work.usecase.RemoveWatchedWork;
 import com.gotta_watch_them_all.app.user_work.usecase.SaveWatchedWork;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,9 @@ public class UserWorkController {
 
     private final SaveWatchedWork saveWatchedWork;
     private final RemoveWatchedWork removeWatchedWork;
+    private final FindWorksWatchedByOneUser findWorksWatchedByOneUser;
 
-    @PostMapping("/user/{userId}/work/{workId}")
+    @PostMapping("/users/{userId}/works/{workId}")
     public ResponseEntity<?> saveWatchedWork(
             @PathVariable("userId")
             @Min(value = 1, message = "id has to be equal or more than 1") Long userId,
@@ -28,7 +30,7 @@ public class UserWorkController {
     ) {
         var newUserWork = saveWatchedWork.execute(userId, workId);
         var uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/user/{userId}/work/{workId}")
+                .path("/users/{userId}/works/{workId}")
                 .buildAndExpand(
                         Map.of("userId", newUserWork.getUser().getId(),
                                 "workId", newUserWork.getWork().getId()))
@@ -36,7 +38,7 @@ public class UserWorkController {
         return ResponseEntity.created(uri).build();
     }
 
-    @DeleteMapping("/user/{userId}/work/{workId}")
+    @DeleteMapping("/users/{userId}/works/{workId}")
     public ResponseEntity<?> removeWatchedWork(
             @PathVariable("userId")
             @Min(value = 1, message = "id has to be equal or more than 1") Long userId,
@@ -45,6 +47,15 @@ public class UserWorkController {
     ) {
         removeWatchedWork.execute(userId, workId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/users/{userId}/works")
+    public ResponseEntity<?> getWatchedWorkByUser(
+            @PathVariable("userId")
+            @Min(value = 1, message = "id has to be equal or more than 1") Long userId
+    ) {
+        final var works = findWorksWatchedByOneUser.execute(userId);
+        return ResponseEntity.ok(works);
     }
 
 

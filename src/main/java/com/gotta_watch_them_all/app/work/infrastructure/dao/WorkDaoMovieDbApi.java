@@ -44,6 +44,12 @@ public class WorkDaoMovieDbApi implements WorkDao {
     }
 
     @Override
+    public Set<Work> findAllByIds(Set<Long> ids) {
+        return null;
+    }
+
+
+    @Override
     public Work findById(Long id) {
         return null;
     }

@@ -2,14 +2,20 @@ package com.gotta_watch_them_all.app.user_work.infrastructure.dao;
 
 import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.user.core.dao.UserDao;
+import com.gotta_watch_them_all.app.user.core.entity.User;
 import com.gotta_watch_them_all.app.user_work.core.dao.UserWorkDao;
 import com.gotta_watch_them_all.app.user_work.core.entity.UserWork;
+import com.gotta_watch_them_all.app.user_work.infrastructure.dataprovider.entity.UserWorkEntity;
 import com.gotta_watch_them_all.app.user_work.infrastructure.dataprovider.mapper.UserWorkMapper;
 import com.gotta_watch_them_all.app.user_work.infrastructure.dataprovider.repository.UserWorkRepository;
 import com.gotta_watch_them_all.app.work.core.dao.WorkDao;
+import com.gotta_watch_them_all.app.work.core.entity.Work;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +49,15 @@ public class UserWorkDaoMySql implements UserWorkDao {
         return new UserWork()
                 .setUser(user)
                 .setWork(work);
+    }
+
+    @Override
+    public Set<Work> findWorksByUser(User user) {
+        final var workIds = userWorkRepository.findAllByUserId(user.getId())
+                .stream()
+                .map(UserWorkEntity::getWorkId)
+                .collect(Collectors.toSet());
+        return workDao.findAllByIds(workIds);
     }
 
     private void checkIfUserWorkExists(Long userId, Long workId) {

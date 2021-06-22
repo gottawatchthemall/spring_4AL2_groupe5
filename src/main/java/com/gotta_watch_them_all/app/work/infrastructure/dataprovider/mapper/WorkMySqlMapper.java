@@ -5,6 +5,9 @@ import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.infrastructure.dataprovider.entity.WorkEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class WorkMySqlMapper {
     public Work toDomain(WorkEntity entity) {
@@ -46,6 +49,12 @@ public class WorkMySqlMapper {
                 .setPoster(work.getPoster())
                 .setMediaId(work.getMedia().getId())
                 .setScore(work.getScore());
+    }
+
+    public List<Work> toDomainList(List<WorkEntity> entities) {
+        return entities.stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
 }
