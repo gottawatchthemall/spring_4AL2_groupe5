@@ -53,9 +53,7 @@ public class WorkDaoMySql implements WorkDao {
             throw new IllegalImdbIdGivenException("ImdbId can not be null or empty");
         }
         var workEntity = workRepository.findByImdbId(imdbId);
-        if (workEntity == null) {
-            throw new NotFoundException(String.format("Work with imdbId %s does not exists", imdbId));
-        }
+        if (workEntity == null) return null;
         return workMySqlMapper.toDomain(workEntity);
     }
 

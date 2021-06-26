@@ -54,12 +54,6 @@ class WorkDaoMySqlTest {
     }
 
     @Test
-    public void findByImdbId_should_throw_not_found_exception_if_imdbid_not_found() {
-        Mockito.when(mockWorkRepository.findByImdbId("bjr")).thenReturn(null);
-        assertThrows(NotFoundException.class, () -> sut.findByImdbId("bjr"));
-    }
-
-    @Test
     public void findByImdbId_should_return_work_model() throws IllegalImdbIdGivenException, NotFoundException {
         Work expectedWork = new Work()
                 .setId(1L)
