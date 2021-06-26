@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.core.entity;
+package com.gotta_watch_them_all.app.comment.core.entity;
 
 import com.gotta_watch_them_all.app.user.core.entity.User;
 import com.gotta_watch_them_all.app.work.core.entity.Work;
@@ -8,9 +8,9 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class Comment {
-    private Long id;
-    private String content;
-    private boolean vulgar;
-    private User user;
-    private Work work;
+  private Long id;
+  private String content;
+  private boolean vulgar;
+  private Long userId;
+  private Long workId;
 }
