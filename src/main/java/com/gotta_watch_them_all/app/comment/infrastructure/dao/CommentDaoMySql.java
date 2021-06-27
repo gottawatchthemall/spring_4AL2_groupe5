@@ -1,14 +1,18 @@
 package com.gotta_watch_them_all.app.comment.infrastructure.dao;
 
 import com.gotta_watch_them_all.app.comment.core.dao.CommentDao;
+import com.gotta_watch_them_all.app.comment.core.entity.Comment;
 import com.gotta_watch_them_all.app.comment.infrastructure.dataprovider.entity.CommentEntity;
+import com.gotta_watch_them_all.app.comment.infrastructure.dataprovider.mapper.CommentMapper;
 import com.gotta_watch_them_all.app.comment.infrastructure.dataprovider.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
-public class CommentDaoImpl implements CommentDao {
+public class CommentDaoMySql implements CommentDao {
   private final CommentRepository commentRepository;
 
   @Override
@@ -20,5 +24,33 @@ public class CommentDaoImpl implements CommentDao {
             .setWorkId(workId)
     );
     return savedCommentEntity.getId();
+  }
+
+  @Override
+  public Set<Comment> findAll() {
+    return null;
+  }
+
+  @Override
+  public Set<Comment> findByWorkId(Long workId) {
+    return null;
+  }
+
+  @Override
+  public Comment findById(Long commentId) {
+    return null;
+  }
+
+  @Override
+  public void deleteComment(Long commentId) {
+
+  }
+
+  @Override
+  public Comment save(Comment comment) {
+    var commentEntity = CommentMapper.domainToEntity(comment);
+    var commentSaved = commentRepository.save(commentEntity);
+
+    return CommentMapper.entityToDomain(commentSaved);
   }
 }
