@@ -24,14 +24,11 @@ public class CommentController {
   public ResponseEntity<Long> createComment(
       @Valid @RequestBody CreateCommentRequest comment
   ) {
-    System.out.println(comment);
-    /* var commentId = createComment.execute(content, userId, workId);
+    var commentId = createComment.execute(comment.getContent(), comment.getUserId(), comment.getWorkId());
     var uid = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(commentId)
         .toUri();
-    return created().build();
-     */
-    return null;
+    return created(uid).build();
   }
 }
