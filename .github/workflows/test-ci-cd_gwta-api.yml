@@ -50,4 +50,4 @@ jobs:
         app-name: 'GWTA-api'
         slot-name: 'production'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_037B039CB2294336B1502C0284758080 }}
-        package: ${{ github.workspace }}/target/*.jar
+        package: '*.jar'
