@@ -6,7 +6,7 @@ import com.gotta_watch_them_all.app.banned_word.usecase.DeleteBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindAllBannedWords;
 import com.gotta_watch_them_all.app.banned_word.usecase.FindOneBannedWordById;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;

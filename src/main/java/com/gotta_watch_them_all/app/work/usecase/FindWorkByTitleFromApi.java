@@ -3,7 +3,7 @@ package com.gotta_watch_them_all.app.work.usecase;
 import com.gotta_watch_them_all.app.work.core.dao.WorkDao;
 import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,6 @@
 package com.gotta_watch_them_all.app.comment.infrastructure.entrypoint;
 
 import com.gotta_watch_them_all.app.comment.usecase.CreateComment;
-import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.core.entity;
+package com.gotta_watch_them_all.app.tag.core.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

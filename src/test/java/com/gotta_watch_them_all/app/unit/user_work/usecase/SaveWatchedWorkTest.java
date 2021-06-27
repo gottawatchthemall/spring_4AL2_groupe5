@@ -1,7 +1,7 @@
 package com.gotta_watch_them_all.app.unit.user_work.usecase;
 
-import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.AlreadyCreatedException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import com.gotta_watch_them_all.app.user.core.entity.User;
 import com.gotta_watch_them_all.app.user.infrastructure.dao.UserDaoImpl;
 import com.gotta_watch_them_all.app.user_work.core.entity.UserWork;

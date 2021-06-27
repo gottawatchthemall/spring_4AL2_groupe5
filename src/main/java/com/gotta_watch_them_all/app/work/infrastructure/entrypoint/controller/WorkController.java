@@ -1,7 +1,5 @@
 package com.gotta_watch_them_all.app.work.infrastructure.entrypoint.controller;
 
-import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
 import com.gotta_watch_them_all.app.work.infrastructure.entrypoint.response.WorkByTitleResponse;
 import com.gotta_watch_them_all.app.work.infrastructure.entrypoint.adapter.WorkAdapter;
 import com.gotta_watch_them_all.app.work.usecase.FindWorkByTitleFromApi;

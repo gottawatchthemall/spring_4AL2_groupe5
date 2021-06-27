@@ -4,8 +4,8 @@ import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import com.gotta_watch_them_all.app.role.core.entity.Role;
 import com.gotta_watch_them_all.app.role.core.entity.RoleName;
-import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.AlreadyCreatedException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

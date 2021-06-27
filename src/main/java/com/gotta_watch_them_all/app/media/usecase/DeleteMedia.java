@@ -1,7 +1,7 @@
 package com.gotta_watch_them_all.app.media.usecase;
 
 import com.gotta_watch_them_all.app.media.core.MediaDao;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -2,7 +2,7 @@ package com.gotta_watch_them_all.app.unit.work.usecase;
 
 import com.gotta_watch_them_all.app.work.core.entity.Work;
 import com.gotta_watch_them_all.app.work.core.exception.IllegalTitleGivenException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import com.gotta_watch_them_all.app.work.infrastructure.dao.WorkDaoMovieDbApi;
 import com.gotta_watch_them_all.app.work.usecase.FindWorkByTitleFromApi;
 import org.junit.jupiter.api.BeforeEach;

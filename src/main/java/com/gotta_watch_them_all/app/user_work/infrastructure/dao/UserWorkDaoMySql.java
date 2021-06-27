@@ -1,6 +1,6 @@
 package com.gotta_watch_them_all.app.user_work.infrastructure.dao;
 
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import com.gotta_watch_them_all.app.user.core.entity.User;
 import com.gotta_watch_them_all.app.user_work.core.dao.UserWorkDao;

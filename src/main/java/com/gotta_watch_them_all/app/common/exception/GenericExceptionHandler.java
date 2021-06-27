@@ -1,9 +1,9 @@
-package com.gotta_watch_them_all.app.infrastructure.entrypoint.exception;
+package com.gotta_watch_them_all.app.common.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gotta_watch_them_all.app.core.exception.AlreadyCreatedException;
-import com.gotta_watch_them_all.app.core.exception.NotFoundException;
+import com.gotta_watch_them_all.app.common.exception.AlreadyCreatedException;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.infrastructure.dataprovider.entity;
+package com.gotta_watch_them_all.app.tag.infrastructure.dataprovider.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
