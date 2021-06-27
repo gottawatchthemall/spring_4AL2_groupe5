@@ -10,9 +10,6 @@ public class CreateCommentRequest {
   @NotBlank(message = "content has to be not blank")
   private String content;
 
-  @NotNull(message = "userId has to be not blank")
-  private Long userId;
-
   @NotNull(message = "workId has to be not blank")
   private Long workId;
 }

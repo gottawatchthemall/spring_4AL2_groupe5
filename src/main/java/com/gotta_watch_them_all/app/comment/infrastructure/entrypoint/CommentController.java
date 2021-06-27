@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
@@ -21,9 +22,10 @@ public class CommentController {
 
   @PostMapping
   public ResponseEntity<Long> createComment(
-      @Valid @RequestBody CreateCommentRequest comment
+      @Valid @RequestBody CreateCommentRequest comment,
+      @ApiIgnore @RequestAttribute("userId") String userId
   ) {
-    var commentId = createComment.execute(comment.getContent(), comment.getUserId(), comment.getWorkId());
+    var commentId = createComment.execute(comment.getContent(), Long.parseLong(userId), comment.getWorkId());
     var uid = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(commentId)
