@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -27,7 +28,7 @@ public class UserWorkController {
     public ResponseEntity<?> saveWatchedWork(
             @PathVariable("workId")
             @NotBlank(message = "id has to be") String workId,
-            @RequestAttribute("userId") String userId
+            @ApiIgnore @RequestAttribute("userId") String userId
     ) {
         final var newUserWork = saveWatchedWork.execute(Long.valueOf(userId), workId);
 
@@ -41,7 +42,7 @@ public class UserWorkController {
 
     @DeleteMapping("/works/{workId}")
     public ResponseEntity<?> removeWatchedWork(
-            @RequestAttribute("userId") String userId,
+            @ApiIgnore @RequestAttribute("userId") String userId,
             @PathVariable("workId")
             @Min(value = 1, message = "id has to be equal or more than 1") Long workId
     ) {
@@ -51,7 +52,7 @@ public class UserWorkController {
 
     @GetMapping("/works")
     public ResponseEntity<?> getWatchedWorkByCurrentUser(
-            @RequestAttribute("userId") String userId
+            @ApiIgnore @RequestAttribute("userId") String userId
     ) {
         final var works = findWorksWatchedByOneUser.execute(Long.valueOf(userId));
         return ResponseEntity.ok(works);
@@ -59,7 +60,7 @@ public class UserWorkController {
 
     @GetMapping("/works/{workId}")
     public ResponseEntity<?> getWatchedWorkById(
-            @RequestAttribute("userId") String userId,
+            @ApiIgnore @RequestAttribute("userId") String userId,
             @PathVariable("workId")
             @Min(value = 1, message = "id has to be equal or more than 1") Long workId
     ) {
