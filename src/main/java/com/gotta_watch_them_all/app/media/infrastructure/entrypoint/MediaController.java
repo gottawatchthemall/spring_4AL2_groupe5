@@ -15,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,10 +42,9 @@ public class MediaController {
     @GetMapping("{id}")
     public ResponseEntity<MediaResponse> findById(
             @PathVariable("id")
-            @Pattern(regexp = "^\\d$", message = "id has to be an integer")
-            @Min(value = 1, message = "id has to be equal or more than 1") String mediaId
+            @Min(value = 1, message = "id has to be equal or more than 1") Long mediaId
     ) throws NotFoundException {
-        var media = findMediaById.execute(Long.parseLong(mediaId));
+        var media = findMediaById.execute(mediaId);
         return ok(MediaAdapter.domainToResponse(media));
     }
 
@@ -65,10 +63,9 @@ public class MediaController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteOne(
             @PathVariable("id")
-            @Pattern(regexp = "^\\d$", message = "id has to be an integer")
-            @Min(value = 1, message = "id has to be equal or more than 1") String mediaId
+            @Min(value = 1, message = "id has to be equal or more than 1") Long mediaId
     ) throws NotFoundException {
-        deleteMedia.execute(Long.parseLong(mediaId));
+        deleteMedia.execute(mediaId);
         return noContent().build();
     }
 }
