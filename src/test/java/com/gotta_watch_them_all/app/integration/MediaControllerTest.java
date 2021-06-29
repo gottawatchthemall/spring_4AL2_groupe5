@@ -102,13 +102,9 @@ class MediaControllerTest {
     class FindById {
         @ParameterizedTest
         @ValueSource(strings = {"notNumber", "2.3"})
-        void when_request_param_is_not_integer_should_send_error_response(String notCorrectId) throws Exception {
-            var errorContent = mockMvc.perform(get("/api/media/" + notCorrectId))
-                    .andExpect(status().isBadRequest())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
-            assertThat(errorContent).contains("id has to be an integer");
+        void when_request_param_is_not_integer_should_send_bad_request_error_response(String notCorrectId) throws Exception {
+            mockMvc.perform(get("/api/media/" + notCorrectId))
+                    .andExpect(status().isBadRequest());
         }
 
         @ParameterizedTest
@@ -221,12 +217,8 @@ class MediaControllerTest {
         @ParameterizedTest
         @ValueSource(strings = {"notnumber", "2.3"})
         public void when_param_is_not_number_should_response_bad_request(String notNumber) throws Exception {
-            var errorContent = mockMvc.perform(delete("/api/media/" + notNumber).header("Authorization", "Bearer " + jwtAdmin))
-                    .andExpect(status().isBadRequest())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
-            assertThat(errorContent).contains("id has to be an integer");
+            mockMvc.perform(delete("/api/media/" + notNumber).header("Authorization", "Bearer " + jwtAdmin))
+                    .andExpect(status().isBadRequest());
         }
 
         @ParameterizedTest
