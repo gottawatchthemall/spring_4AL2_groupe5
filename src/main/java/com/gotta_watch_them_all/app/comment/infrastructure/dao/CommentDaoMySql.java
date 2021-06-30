@@ -57,4 +57,12 @@ public class CommentDaoMySql implements CommentDao {
 
     return CommentMapper.entityToDomain(commentSaved);
   }
+
+  @Override
+  public void saveAll(Set<Comment> setComment) {
+    var setCommentEntity = setComment.stream()
+            .map(CommentMapper::domainToEntity)
+            .collect(Collectors.toSet());
+    commentRepository.saveAll(setCommentEntity);
+  }
 }

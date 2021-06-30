@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -135,14 +136,40 @@ class CommentDaoImplTest {
       var savedCommentEntity = new CommentEntity()
           .setId(expectedId)
           .setContent(content)
-          .setUserId(userId)
-          .setWorkId(workId);
+              .setUserId(userId)
+              .setWorkId(workId);
 
       when(mockCommentRepository.save(commentEntity)).thenReturn(savedCommentEntity);
 
 
       var result = sut.save(comment);
       assertThat(result).isEqualTo(comment);
+    }
+  }
+
+  @Nested
+  class UpdateCommentAllTest {
+    @Test
+    void should_call_repository_to_save_all_comment() {
+      var commentEntity1 = new Comment()
+              .setId(1L)
+              .setContent("content 1")
+              .setUserId(userId)
+              .setVulgar(false)
+              .setWorkId(workId);
+      var commentEntity2 = new Comment()
+              .setId(2L)
+              .setContent("content 2")
+              .setUserId(3L)
+              .setVulgar(true)
+              .setWorkId(5L);
+      var setComment = Set.of(commentEntity1, commentEntity2);
+
+      sut.saveAll(setComment);
+
+      var expectedSetComment = setComment.stream().map(CommentMapper::domainToEntity)
+              .collect(Collectors.toSet());
+      verify(mockCommentRepository, times(1)).saveAll(expectedSetComment);
     }
   }
 }
