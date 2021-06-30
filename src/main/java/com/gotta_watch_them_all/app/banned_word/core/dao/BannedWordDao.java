@@ -8,7 +8,7 @@ import java.util.Set;
 public interface BannedWordDao {
     Boolean existsByWord(String word);
 
-    BannedWord save(String word);
+    BannedWord saveWord(String word);
 
     BannedWord findById(Long bannedWordId) throws NotFoundException;
 

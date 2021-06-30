@@ -18,7 +18,7 @@ public class SaveOneBannedWord {
             );
             throw new AlreadyCreatedException(message);
         }
-        var savedBannedWord = bannedWordDao.save(word);
+        var savedBannedWord = bannedWordDao.saveWord(word);
         
         return savedBannedWord.getId();
     }

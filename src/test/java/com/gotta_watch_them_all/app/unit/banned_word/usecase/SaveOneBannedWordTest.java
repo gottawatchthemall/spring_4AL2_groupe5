@@ -45,7 +45,7 @@ class SaveOneBannedWordTest {
         var savedBannedWord = new BannedWord()
                 .setId(65L)
                 .setWord(wordToBanned);
-        when(mockBannedWordDao.save(wordToBanned)).thenReturn(savedBannedWord);
+        when(mockBannedWordDao.saveWord(wordToBanned)).thenReturn(savedBannedWord);
 
         var result = sut.execute(wordToBanned);
 

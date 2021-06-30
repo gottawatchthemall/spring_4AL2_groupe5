@@ -24,7 +24,7 @@ public class BannedWordDaoMySql implements BannedWordDao {
     }
 
     @Override
-    public BannedWord save(String word) {
+    public BannedWord saveWord(String word) {
         var bannedWordToSave = new BannedWordEntity()
                 .setWord(word);
         var savedBannedWord = bannedWordRepository.save(bannedWordToSave);
