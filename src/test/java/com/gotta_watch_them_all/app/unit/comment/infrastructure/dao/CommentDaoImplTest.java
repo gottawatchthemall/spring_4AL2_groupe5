@@ -12,6 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Set;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -58,14 +61,50 @@ class CommentDaoImplTest {
   }
 
   @Nested
+  class FindAllTest {
+    @Test
+    void should_call_findAll_of_repository() {
+      sut.findAll();
+
+      verify(mockCommentRepository, times(1)).findAll();
+    }
+
+    @Test
+    void when_get_list_comment_should_return_set_comment() {
+      var commentEntity1 = new CommentEntity()
+              .setId(1L)
+              .setContent("content 1")
+              .setUserId(userId)
+              .setVulgar(false)
+              .setWorkId(workId);
+      var commentEntity2 = new CommentEntity()
+              .setId(2L)
+              .setContent("content 2")
+              .setUserId(3L)
+              .setVulgar(true)
+              .setWorkId(5L);
+      var listComment = List.of(commentEntity1, commentEntity2);
+      when(mockCommentRepository.findAll()).thenReturn(listComment);
+
+      var result = sut.findAll();
+
+      var comment1 = CommentMapper.entityToDomain(commentEntity1);
+      var comment2 = CommentMapper.entityToDomain(commentEntity2);
+      var expectedSetComment = Set.of(comment1, comment2);
+
+      assertThat(result).isEqualTo(expectedSetComment);
+    }
+  }
+
+  @Nested
   class SaveCommentTest {
     @Test
     void when_save_comment_repository_should_return_save_comment() {
       var expectedId = 10L;
       var comment = new Comment()
-          .setContent(content)
-          .setUserId(userId)
-          .setWorkId(workId);
+              .setContent(content)
+              .setUserId(userId)
+              .setWorkId(workId);
       var commentEntity = CommentMapper.domainToEntity(comment);
       var savedCommentEntity = new CommentEntity()
           .setId(expectedId)

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,10 @@ public class CommentDaoMySql implements CommentDao {
 
   @Override
   public Set<Comment> findAll() {
-    return null;
+    var listComment = commentRepository.findAll();
+    return listComment.stream()
+            .map(CommentMapper::entityToDomain)
+            .collect(Collectors.toSet());
   }
 
   @Override
