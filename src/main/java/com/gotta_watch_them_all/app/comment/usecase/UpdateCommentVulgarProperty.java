@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class UpdateCommentVulgarProperty {
     private final CommentDao commentDao;
     private final BannedWordDao bannedWordDao;
-    @Qualifier("IsContainBannedWord")
+    @Qualifier("IsContainNominalGroup")
     private final IsCommentVulgar isCommentVulgar;
 
     public void execute() {

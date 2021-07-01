@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+@Component("IsContainNominalGroup")
 public class IsContainNominalGroup implements IsCommentVulgar {
     @Override
     public Boolean execute(String comment, Set<String> setBannedWord) {
