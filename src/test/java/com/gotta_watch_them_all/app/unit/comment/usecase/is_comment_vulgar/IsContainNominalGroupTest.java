@@ -101,4 +101,11 @@ class IsContainNominalGroupTest {
 
         assertThat(sut.execute("\tson of beach ", setBannedWord)).isTrue();
     }
+
+    @Test
+    void when_banned_word_are_php_jakarta_anticonstitutionellement_and_comment_contain_spring_is_coll_should_return_false() {
+        var setBannedWord = Set.of("php", "jakarta", "anticonstitutionellement");
+
+        assertThat(sut.execute("spring is cool", setBannedWord)).isFalse();
+    }
 }

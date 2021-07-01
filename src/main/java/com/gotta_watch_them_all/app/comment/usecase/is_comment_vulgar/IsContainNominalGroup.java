@@ -30,7 +30,7 @@ public class IsContainNominalGroup implements IsCommentVulgar {
         return upperSetBannedWord.stream()
                 .anyMatch(bannedWord -> {
                     var index = upperComment.indexOf(bannedWord);
-                    if (upperComment.length() > index + bannedWord.length()) {
+                    if (index > -1 && upperComment.length() > index + bannedWord.length()) {
                         return !Character.isLetterOrDigit(upperComment.charAt(index + bannedWord.length()));
                     }
                     return upperComment.contains(bannedWord);
