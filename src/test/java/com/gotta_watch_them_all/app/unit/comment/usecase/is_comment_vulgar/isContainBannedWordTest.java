@@ -1,22 +1,22 @@
 package com.gotta_watch_them_all.app.unit.comment.usecase.is_comment_vulgar;
 
-import com.gotta_watch_them_all.app.comment.usecase.is_comment_vulgar.IsContainBannedWord;
-import org.junit.jupiter.api.BeforeEach;
+import com.gotta_watch_them_all.app.comment.usecase.is_comment_vulgar.IsCommentVulgar;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@SpringBootTest
 class isContainBannedWordTest {
-    private IsContainBannedWord sut;
-
-    @BeforeEach
-    void setup() {
-        sut = new IsContainBannedWord();
-    }
+    @Autowired
+    @Qualifier("IsContainBannedWord")
+    private IsCommentVulgar sut;
 
     @Test
     void when_comment_not_contain_banned_word_should_return_false() {
