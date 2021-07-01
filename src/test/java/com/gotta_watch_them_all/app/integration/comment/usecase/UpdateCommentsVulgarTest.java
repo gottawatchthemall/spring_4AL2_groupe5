@@ -3,7 +3,7 @@ package com.gotta_watch_them_all.app.integration.comment.usecase;
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.comment.core.dao.CommentDao;
 import com.gotta_watch_them_all.app.comment.core.entity.Comment;
-import com.gotta_watch_them_all.app.comment.usecase.UpdateCommentVulgarProperty;
+import com.gotta_watch_them_all.app.comment.usecase.UpdateCommentsVulgar;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-class UpdateCommentVulgarPropertyTest {
+class UpdateCommentsVulgarTest {
     @Autowired
-    private UpdateCommentVulgarProperty sut;
+    private UpdateCommentsVulgar sut;
 
     @Autowired
     private CommentDao commentDao;

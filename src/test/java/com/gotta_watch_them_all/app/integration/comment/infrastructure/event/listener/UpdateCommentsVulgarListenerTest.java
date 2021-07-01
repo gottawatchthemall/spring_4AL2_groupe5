@@ -1,18 +1,18 @@
-package com.gotta_watch_them_all.app.integration.comment.infrastructure.entrypoint.listener;
+package com.gotta_watch_them_all.app.integration.comment.infrastructure.event.listener;
 
-import com.gotta_watch_them_all.app.comment.core.event.UpdateCommentVulgarPropertyEvent;
+import com.gotta_watch_them_all.app.comment.core.event.UpdateCommentsVulgarEvent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 
 @SpringBootTest
-class UpdateCommentVulgarPropertyListenerTest {
+class UpdateCommentsVulgarListenerTest {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
     @Test
     void test() {
-        applicationEventPublisher.publishEvent(new UpdateCommentVulgarPropertyEvent(this));
+        applicationEventPublisher.publishEvent(new UpdateCommentsVulgarEvent(this));
     }
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateCommentVulgarProperty {
+public class UpdateCommentsVulgar {
     private final CommentDao commentDao;
     private final BannedWordDao bannedWordDao;
     @Qualifier("IsContainNominalGroup")
