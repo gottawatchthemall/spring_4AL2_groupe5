@@ -1,8 +1,11 @@
 package com.gotta_watch_them_all.app.comment.usecase.is_comment_vulgar;
 
 
+import org.springframework.stereotype.Component;
+
 import java.util.Set;
 
+@Component
 public class IsContainBannedWord implements IsCommentVulgar {
 
     @Override

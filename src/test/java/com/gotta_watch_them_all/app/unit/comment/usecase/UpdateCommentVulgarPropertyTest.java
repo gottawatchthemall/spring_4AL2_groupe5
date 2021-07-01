@@ -4,7 +4,7 @@ import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.comment.core.dao.CommentDao;
 import com.gotta_watch_them_all.app.comment.core.entity.Comment;
-import com.gotta_watch_them_all.app.comment.usecase.UpdateCommentIfVulgar;
+import com.gotta_watch_them_all.app.comment.usecase.UpdateCommentVulgarProperty;
 import com.gotta_watch_them_all.app.comment.usecase.is_comment_vulgar.IsCommentVulgar;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +17,8 @@ import java.util.Set;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UpdateCommentIfVulgarTest {
-    private UpdateCommentIfVulgar sut;
+class UpdateCommentVulgarPropertyTest {
+    private UpdateCommentVulgarProperty sut;
 
     @Mock
     private CommentDao mockCommentDao;
@@ -31,7 +31,7 @@ class UpdateCommentIfVulgarTest {
 
     @BeforeEach
     void setup() {
-        sut = new UpdateCommentIfVulgar(mockCommentDao, mockBannedWordDao, mockIsCommentVulgar);
+        sut = new UpdateCommentVulgarProperty(mockCommentDao, mockBannedWordDao, mockIsCommentVulgar);
     }
 
     @Test

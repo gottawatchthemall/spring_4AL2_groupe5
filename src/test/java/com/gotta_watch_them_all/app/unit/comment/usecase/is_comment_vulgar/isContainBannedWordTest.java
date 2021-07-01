@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.unit.comment.usecase.update_comment_depend_banned_word;
+package com.gotta_watch_them_all.app.unit.comment.usecase.is_comment_vulgar;
 
 import com.gotta_watch_them_all.app.comment.usecase.is_comment_vulgar.IsContainBannedWord;
 import org.junit.jupiter.api.BeforeEach;

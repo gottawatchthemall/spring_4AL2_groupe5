@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateCommentIfVulgar {
+public class UpdateCommentVulgarProperty {
     private final CommentDao commentDao;
     private final BannedWordDao bannedWordDao;
     private final IsCommentVulgar isCommentVulgar;
@@ -25,11 +25,7 @@ public class UpdateCommentIfVulgar {
                 .map(BannedWord::getWord)
                 .collect(Collectors.toSet());
         setComment.forEach(comment -> {
-            var hasBannedWord = setContentBannedWord.stream().anyMatch(bannedWord -> {
-
-
-                return isArrayCommentWordContainArrayBannedWord(comment, bannedWord);
-            });
+            var hasBannedWord = isCommentVulgar.execute(comment.getContent(), setContentBannedWord);
             comment.setVulgar(hasBannedWord);
         });
 
