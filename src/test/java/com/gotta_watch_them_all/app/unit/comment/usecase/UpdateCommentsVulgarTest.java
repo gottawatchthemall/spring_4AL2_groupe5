@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -134,5 +135,64 @@ class UpdateCommentsVulgarTest {
                 .setWorkId(5L);
         var expectedSetComment = Set.of(comment1, expectedComment2);
         verify(mockCommentDao, times(1)).saveAll(expectedSetComment);
+    }
+
+    @Test
+    void when_save_comments_should_return_set_comments_change_vulgar_property() {
+        var comment1 = new Comment()
+                .setId(1L)
+                .setContent("content 1")
+                .setUserId(61L)
+                .setVulgar(false)
+                .setWorkId(23L);
+        var comment2 = new Comment()
+                .setId(2L)
+                .setContent("content 2 php")
+                .setUserId(3L)
+                .setVulgar(false)
+                .setWorkId(5L);
+        var comment3 = new Comment()
+                .setId(3L)
+                .setContent("kotlin is not vulgar")
+                .setUserId(3L)
+                .setVulgar(true)
+                .setWorkId(5L);
+
+        var setComment = Set.of(comment1, comment2, comment3);
+        when(mockCommentDao.findAll()).thenReturn(setComment);
+        var bannedWord1 = new BannedWord()
+                .setId(31L)
+                .setWord("php");
+        var bannedWord2 = new BannedWord()
+                .setId(45L)
+                .setWord("jakarta");
+        var setBannedWord = Set.of(bannedWord1, bannedWord2);
+        when(mockBannedWordDao.findAll()).thenReturn(setBannedWord);
+        var setStrBannedWord = Set.of("php", "jakarta");
+
+        when(mockIsCommentVulgar.execute("content 1", setStrBannedWord)).thenReturn(false);
+        when(mockIsCommentVulgar.execute("content 2 php", setStrBannedWord)).thenReturn(true);
+        when(mockIsCommentVulgar.execute("kotlin is not vulgar", setStrBannedWord)).thenReturn(false);
+
+        var expectedComment2 = new Comment()
+                .setId(2L)
+                .setContent("content 2 php")
+                .setUserId(3L)
+                .setVulgar(true)
+                .setWorkId(5L);
+        var expectedComment3 = new Comment()
+                .setId(3L)
+                .setContent("kotlin is not vulgar")
+                .setUserId(3L)
+                .setVulgar(false)
+                .setWorkId(5L);
+        var setCommentToSave = Set.of(comment1, expectedComment2, expectedComment3);
+
+        var result = sut.execute();
+
+        verify(mockCommentDao, times(1)).saveAll(setCommentToSave);
+
+        var expectedSetComment = Set.of(expectedComment2, expectedComment3);
+        assertThat(result).isEqualTo(expectedSetComment);
     }
 }

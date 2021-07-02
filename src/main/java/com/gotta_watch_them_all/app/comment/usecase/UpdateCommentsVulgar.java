@@ -3,11 +3,14 @@ package com.gotta_watch_them_all.app.comment.usecase;
 import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.comment.core.dao.CommentDao;
+import com.gotta_watch_them_all.app.comment.core.entity.Comment;
 import com.gotta_watch_them_all.app.comment.usecase.is_comment_vulgar.IsCommentVulgar;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,17 +21,23 @@ public class UpdateCommentsVulgar {
     @Qualifier("IsContainNominalGroup")
     private final IsCommentVulgar isCommentVulgar;
 
-    public void execute() {
+    public Set<Comment> execute() {
+        var result = new HashSet<Comment>();
         var setComment = commentDao.findAll();
         var setBannedWord = bannedWordDao.findAll();
         var setContentBannedWord = setBannedWord.stream()
                 .map(BannedWord::getWord)
                 .collect(Collectors.toSet());
         setComment.forEach(comment -> {
+            var isVulgar = comment.isVulgar();
             var hasBannedWord = isCommentVulgar.execute(comment.getContent(), setContentBannedWord);
             comment.setVulgar(hasBannedWord);
+            if (isVulgar != hasBannedWord) {
+                result.add(comment);
+            }
         });
 
         commentDao.saveAll(setComment);
+        return result;
     }
 }
