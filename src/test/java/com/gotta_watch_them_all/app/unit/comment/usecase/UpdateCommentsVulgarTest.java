@@ -64,7 +64,7 @@ class UpdateCommentsVulgarTest {
     }
 
     @Test
-    void when_get_set_comment_and_banned_word_should_update_comment_if_contain_banned_word() {
+    void when_get_set_comment_and_banned_word_should_check_if_each_comment_is_vulgar() {
         var comment1 = new Comment()
                 .setId(1L)
                 .setContent("content 1")
@@ -77,13 +77,7 @@ class UpdateCommentsVulgarTest {
                 .setUserId(3L)
                 .setVulgar(false)
                 .setWorkId(5L);
-        var comment3 = new Comment()
-                .setId(3L)
-                .setContent("the jakarta has to be banned")
-                .setUserId(3L)
-                .setVulgar(false)
-                .setWorkId(4L);
-        var setComment = Set.of(comment1, comment2, comment3);
+        var setComment = Set.of(comment1, comment2);
         when(mockCommentDao.findAll()).thenReturn(setComment);
         var bannedWord1 = new BannedWord()
                 .setId(31L)
@@ -96,99 +90,49 @@ class UpdateCommentsVulgarTest {
 
         sut.execute();
 
-        var expectedComment2 = new Comment()
-                .setId(2L)
-                .setContent("content 2 php")
-                .setUserId(3L)
-                .setVulgar(true)
-                .setWorkId(5L);
-        var expectedComment3 = new Comment()
-                .setId(3L)
-                .setContent("the jakarta has to be banned")
-                .setUserId(3L)
-                .setVulgar(true)
-                .setWorkId(4L);
-        var expectedSetComment = Set.of(comment1, expectedComment2, expectedComment3);
-        verify(mockCommentDao, times(1)).saveAll(expectedSetComment);
+        var setStrBannedWord = Set.of("php", "jakarta");
+        verify(mockIsCommentVulgar, times(1)).execute("content 1", setStrBannedWord);
+        verify(mockIsCommentVulgar, times(1)).execute("content 2 php", setStrBannedWord);
     }
 
     @Test
-    void when_get_set_comment_and_banned_word_with_few_words_should_update_comment_if_contain_banned_word() {
+    void when_get_set_comment_and_banned_word_and_check_if_each_comment_is_vulgar_should_save_update_comment() {
         var comment1 = new Comment()
                 .setId(1L)
-                .setContent("content 1 swift ui")
+                .setContent("content 1")
                 .setUserId(61L)
                 .setVulgar(false)
                 .setWorkId(23L);
         var comment2 = new Comment()
                 .setId(2L)
                 .setContent("content 2 php")
-                .setUserId(3L)
-                .setVulgar(false)
-                .setWorkId(5L);
-        var comment3 = new Comment()
-                .setId(3L)
-                .setContent("the jakarta has to be banned")
-                .setUserId(3L)
-                .setVulgar(false)
-                .setWorkId(4L);
-        var setComment = Set.of(comment1, comment2, comment3);
-        when(mockCommentDao.findAll()).thenReturn(setComment);
-        var bannedWord1 = new BannedWord()
-                .setId(45L)
-                .setWord("swift ui");
-        var setBannedWord = Set.of(bannedWord1);
-        when(mockBannedWordDao.findAll()).thenReturn(setBannedWord);
-
-        sut.execute();
-
-        var expectedComment1 = new Comment()
-                .setId(1L)
-                .setContent("content 1 swift ui")
-                .setUserId(61L)
-                .setVulgar(true)
-                .setWorkId(23L);
-        var expectedSetComment = Set.of(expectedComment1);
-        verify(mockCommentDao, times(1)).saveAll(expectedSetComment);
-    }
-
-    @Test
-    void when_set_comment_have_word_contain_banned_word_characters_but_not_banned_word_should_not_update_set_comment() {
-        var comment1 = new Comment()
-                .setId(1L)
-                .setContent("content")
-                .setUserId(61L)
-                .setVulgar(false)
-                .setWorkId(23L);
-        var comment2 = new Comment()
-                .setId(2L)
-                .setContent("content2")
                 .setUserId(3L)
                 .setVulgar(false)
                 .setWorkId(5L);
         var setComment = Set.of(comment1, comment2);
         when(mockCommentDao.findAll()).thenReturn(setComment);
         var bannedWord1 = new BannedWord()
+                .setId(31L)
+                .setWord("php");
+        var bannedWord2 = new BannedWord()
                 .setId(45L)
-                .setWord("content");
-        var setBannedWord = Set.of(bannedWord1);
+                .setWord("jakarta");
+        var setBannedWord = Set.of(bannedWord1, bannedWord2);
         when(mockBannedWordDao.findAll()).thenReturn(setBannedWord);
+        var setStrBannedWord = Set.of("php", "jakarta");
+
+        when(mockIsCommentVulgar.execute("content 1", setStrBannedWord)).thenReturn(false);
+        when(mockIsCommentVulgar.execute("content 2 php", setStrBannedWord)).thenReturn(true);
 
         sut.execute();
 
-        var expectedComment1 = new Comment()
-                .setId(1L)
-                .setContent("content")
-                .setUserId(61L)
-                .setVulgar(true)
-                .setWorkId(23L);
         var expectedComment2 = new Comment()
                 .setId(2L)
-                .setContent("content2")
+                .setContent("content 2 php")
                 .setUserId(3L)
-                .setVulgar(false)
+                .setVulgar(true)
                 .setWorkId(5L);
-        var expectedSetComment = Set.of(expectedComment1, expectedComment2);
+        var expectedSetComment = Set.of(comment1, expectedComment2);
         verify(mockCommentDao, times(1)).saveAll(expectedSetComment);
     }
 }
