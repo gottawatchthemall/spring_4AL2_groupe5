@@ -4,7 +4,7 @@ import com.gotta_watch_them_all.app.comment.core.entity.Comment;
 import com.gotta_watch_them_all.app.comment.core.event.UpdateCommentsVulgarEvent;
 import com.gotta_watch_them_all.app.comment.infrastructure.event.listener.UpdateCommentsVulgarListener;
 import com.gotta_watch_them_all.app.comment.usecase.UpdateCommentsVulgar;
-import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgar;
+import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgarEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,6 +63,6 @@ class UpdateCommentsVulgarListenerTest {
 
         var expectedSetUserId = Set.of(45L, 46L);
         verify(mockApplicationEventPublisher, times(1))
-                .publishEvent(new UpdateUsersVulgar(sut, expectedSetUserId));
+                .publishEvent(new UpdateUsersVulgarEvent(sut, expectedSetUserId));
     }
 }

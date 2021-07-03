@@ -3,7 +3,7 @@ package com.gotta_watch_them_all.app.comment.infrastructure.event.listener;
 import com.gotta_watch_them_all.app.comment.core.entity.Comment;
 import com.gotta_watch_them_all.app.comment.core.event.UpdateCommentsVulgarEvent;
 import com.gotta_watch_them_all.app.comment.usecase.UpdateCommentsVulgar;
-import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgar;
+import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgarEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
@@ -24,6 +24,6 @@ public class UpdateCommentsVulgarListener implements ApplicationListener<UpdateC
                 .map(Comment::getUserId)
                 .collect(Collectors.toSet());
 
-        applicationEventPublisher.publishEvent(new UpdateUsersVulgar(this, setUserId));
+        applicationEventPublisher.publishEvent(new UpdateUsersVulgarEvent(this, setUserId));
     }
 }
