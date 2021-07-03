@@ -6,7 +6,9 @@ import com.gotta_watch_them_all.app.comment.core.entity.Comment;
 import com.gotta_watch_them_all.app.helper.AuthHelper;
 import com.gotta_watch_them_all.app.helper.AuthHelperData;
 import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
+import com.gotta_watch_them_all.app.role.core.entity.Role;
 import com.gotta_watch_them_all.app.role.core.entity.RoleName;
+import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class BannedWordApiTest {
 
     @Autowired
     private CommentDao commentDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @LocalServerPort
     private int localPort;
@@ -115,6 +120,84 @@ public class BannedWordApiTest {
                         .findFirst();
                 assertThat(maybeComment2.isPresent()).isTrue();
                 assertThat(maybeComment2.get().isVulgar()).isFalse();
+            }
+
+            @Test
+            void should_update_user_vulgar_property_depend_to_number_vulgar_comments() {
+                var savedUserId = userDao.createUser(
+                        "user",
+                        "user@gmail.com",
+                        "userpassword",
+                        Set.of(new Role().setId(1L).setName(RoleName.ROLE_USER)));
+                commentDao.save(new Comment()
+                        .setContent("the testBannedWord guys are braves")
+                        .setVulgar(false)
+                        .setWorkId(12L)
+                        .setUserId(savedUserId));
+                commentDao.save(new Comment()
+                        .setContent("future is kotlin style")
+                        .setVulgar(false)
+                        .setWorkId(13L)
+                        .setUserId(savedUserId));
+                commentDao.save(new Comment()
+                        .setContent("testBannedWord style")
+                        .setVulgar(false)
+                        .setWorkId(14L)
+                        .setUserId(savedUserId));
+                commentDao.save(new Comment()
+                        .setContent("style testBannedWord style")
+                        .setVulgar(false)
+                        .setWorkId(15L)
+                        .setUserId(savedUserId));
+
+                var currentUser = userDao.findById(savedUserId);
+                assertThat(currentUser.isVulgar()).isFalse();
+
+                var request = new SaveBannedWordRequest()
+                        .setWord("testBannedWord");
+
+                var responseUri = given()
+                        .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                        .contentType(ContentType.JSON)
+                        .body(request)
+                        .when()
+                        .post("/api/banned-word?update_comment=true")
+                        .then()
+                        .statusCode(201)
+                        .extract()
+                        .header("Location");
+
+                currentUser = userDao.findById(savedUserId);
+                assertThat(currentUser).isNotNull();
+                assertThat(currentUser.isVulgar()).isTrue();
+
+                var request2 = new SaveBannedWordRequest()
+                        .setWord("kotlin");
+                given()
+                        .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                        .contentType(ContentType.JSON)
+                        .body(request2)
+                        .when()
+                        .post("/api/banned-word?update_comment=true")
+                        .then()
+                        .statusCode(201)
+                        .extract()
+                        .header("Location");
+
+                currentUser = userDao.findById(savedUserId);
+                assertThat(currentUser).isNotNull();
+                assertThat(currentUser.isVulgar()).isTrue();
+
+                // DELETE Banned word request
+                given()
+                        .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                        .when()
+                        .delete(responseUri + "?update_comment=true")
+                        .then()
+                        .statusCode(204);
+                currentUser = userDao.findById(savedUserId);
+                assertThat(currentUser).isNotNull();
+                assertThat(currentUser.isVulgar()).isFalse();
             }
         }
     }
