@@ -10,4 +10,6 @@ import java.util.Set;
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
   Boolean existsByWorkIdAndUserId(Long workId, Long userId);
   Set<CommentEntity> findByWorkId(Long workId);
+
+  Set<CommentEntity> findAllByUserId(Long userId);
 }

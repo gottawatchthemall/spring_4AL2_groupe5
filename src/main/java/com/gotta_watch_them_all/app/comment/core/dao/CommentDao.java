@@ -19,5 +19,5 @@ public interface CommentDao {
 
     void saveAll(Set<Comment> setComment);
 
-    Set<Comment> findAllByUserId();
+    Set<Comment> findAllByUserId(Long userId);
 }

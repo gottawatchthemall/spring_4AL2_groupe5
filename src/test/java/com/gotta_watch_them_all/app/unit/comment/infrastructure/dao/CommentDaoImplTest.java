@@ -172,4 +172,42 @@ class CommentDaoImplTest {
       verify(mockCommentRepository, times(1)).saveAll(expectedSetComment);
     }
   }
+
+  @Nested
+  class findAllByUserIdTest {
+
+    private final long userId = 61L;
+
+    @Test
+    void should_call_findAllByUserId_of_comment_repository() {
+      sut.findAllByUserId(userId);
+
+      verify(mockCommentRepository, times(1)).findAllByUserId(userId);
+    }
+
+    @Test
+    void when_repository_return_list_comments_by_userId_should_return_set_comment() {
+      long workId = 32L;
+      var comment34 = new CommentEntity()
+              .setId(34L)
+              .setContent("comment34")
+              .setUserId(userId)
+              .setWorkId(workId);
+      var comment35 = new CommentEntity()
+              .setId(35L)
+              .setContent("comment35")
+              .setUserId(userId)
+              .setWorkId(workId);
+      var foundSetComment = Set.of(comment34, comment35);
+      when(mockCommentRepository.findAllByUserId(userId)).thenReturn(foundSetComment);
+
+      var result = sut.findAllByUserId(userId);
+
+      var expectedComment34 = CommentMapper.entityToDomain(comment34);
+      var expectedComment35 = CommentMapper.entityToDomain(comment35);
+      var expectedSetComment = Set.of(expectedComment34, expectedComment35);
+
+      assertThat(result).isEqualTo(expectedSetComment);
+    }
+  }
 }

@@ -67,7 +67,11 @@ public class CommentDaoMySql implements CommentDao {
   }
 
   @Override
-  public Set<Comment> findAllByUserId() {
-    return null;
+  public Set<Comment> findAllByUserId(Long userId) {
+    var foundSetComment = commentRepository.findAllByUserId(userId);
+    return foundSetComment.stream()
+            .map(CommentMapper::entityToDomain)
+            .collect(Collectors.toSet());
   }
+
 }
