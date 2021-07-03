@@ -46,4 +46,22 @@ class DeleteBannedWordByIdTest {
 
         verify(mockBannedWordDao, times(1)).deleteById(bannedWordId);
     }
+
+    @Test
+    void when_update_comment_param_is_false_should_not_publish_event() {
+        when(mockBannedWordDao.existsById(bannedWordId)).thenReturn(true);
+
+        sut.execute(bannedWordId, false);
+
+        verify(mockEventPublisher, never()).publishEvent();
+    }
+
+    @Test
+    void when_update_comment_param_is_true_should_publish_event() {
+        when(mockBannedWordDao.existsById(bannedWordId)).thenReturn(true);
+
+        sut.execute(bannedWordId, true);
+
+        verify(mockEventPublisher, times(1)).publishEvent();
+    }
 }

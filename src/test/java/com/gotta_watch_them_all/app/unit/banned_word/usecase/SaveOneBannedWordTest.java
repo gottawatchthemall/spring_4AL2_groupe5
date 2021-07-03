@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SaveOneBannedWordTest {
@@ -54,5 +54,31 @@ class SaveOneBannedWordTest {
         var result = sut.execute(wordToBanned, false);
 
         assertThat(result).isEqualTo(65L);
+    }
+
+    @Test
+    void when_updateComment_property_is_false_should_not_publish_event_to_update_comment() {
+        when(mockBannedWordDao.existsByWord(wordToBanned)).thenReturn(false);
+        var savedBannedWord = new BannedWord()
+                .setId(65L)
+                .setWord(wordToBanned);
+        when(mockBannedWordDao.saveWord(wordToBanned)).thenReturn(savedBannedWord);
+
+        sut.execute(wordToBanned, false);
+
+        verify(mockEventPublisher, never()).publishEvent();
+    }
+
+    @Test
+    void when_updateComment_property_is_true_should_publish_event_to_update_comment() {
+        when(mockBannedWordDao.existsByWord(wordToBanned)).thenReturn(false);
+        var savedBannedWord = new BannedWord()
+                .setId(65L)
+                .setWord(wordToBanned);
+        when(mockBannedWordDao.saveWord(wordToBanned)).thenReturn(savedBannedWord);
+
+        sut.execute(wordToBanned, true);
+
+        verify(mockEventPublisher, times(1)).publishEvent();
     }
 }
