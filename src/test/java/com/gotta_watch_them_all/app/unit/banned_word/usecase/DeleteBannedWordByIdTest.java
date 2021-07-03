@@ -29,7 +29,7 @@ class DeleteBannedWordByIdTest {
     void when_banned_word_not_exists_should_send_not_found_exception() {
         when(mockBannedWordDao.existsById(bannedWordId)).thenReturn(false);
 
-        assertThatThrownBy(()->sut.execute(bannedWordId))
+        assertThatThrownBy(() -> sut.execute(bannedWordId, false))
                 .isExactlyInstanceOf(NotFoundException.class)
                 .hasMessage("Banned word with id '%d' not found", bannedWordId);
     }
@@ -38,7 +38,7 @@ class DeleteBannedWordByIdTest {
     void when_banned_word_exists_should_delete_banned_word_by_id() throws NotFoundException {
         when(mockBannedWordDao.existsById(bannedWordId)).thenReturn(true);
 
-        sut.execute(bannedWordId);
+        sut.execute(bannedWordId, false);
 
         verify(mockBannedWordDao, times(1)).deleteById(bannedWordId);
     }

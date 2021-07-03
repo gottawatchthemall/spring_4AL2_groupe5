@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 public class DeleteBannedWordById {
     private final BannedWordDao bannedWordDao;
 
-    public void execute(Long bannedWordId) throws NotFoundException {
-        if(!bannedWordDao.existsById(bannedWordId)) {
+    public void execute(Long bannedWordId, Boolean updateComment) throws NotFoundException {
+        if (!bannedWordDao.existsById(bannedWordId)) {
             var message = String.format(
                     "Banned word with id '%d' not found", bannedWordId
             );

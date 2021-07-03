@@ -35,8 +35,12 @@ public class BannedWordController {
     @SneakyThrows
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<URI> saveBannedWord(@Valid @RequestBody SaveBannedWordRequest request) {
-        var bannedWordId = saveOneBannedWord.execute(request.getWord());
+    public ResponseEntity<URI> saveBannedWord(
+            @Valid @RequestBody SaveBannedWordRequest request,
+            @RequestParam(name = "update_comment", required = false, defaultValue = "false") Boolean updateComment
+    ) {
+        System.out.println(updateComment);
+        var bannedWordId = saveOneBannedWord.execute(request.getWord(), updateComment);
 
         var uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -66,7 +70,7 @@ public class BannedWordController {
             @PathVariable("id")
             @Min(value = 1, message = "id has to be equal or more than 1") Long bannedWordId
     ) throws NotFoundException {
-        deleteBannedWordById.execute(bannedWordId);
+        deleteBannedWordById.execute(bannedWordId, false);
         return noContent().build();
     }
 }

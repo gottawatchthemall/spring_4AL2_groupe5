@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class SaveOneBannedWord {
     private final BannedWordDao bannedWordDao;
 
-    public Long execute(String word) throws AlreadyCreatedException {
+    public Long execute(String word, Boolean updateComment) throws AlreadyCreatedException {
         if (bannedWordDao.existsByWord(word)) {
             var message = String.format(
                     "Can't save word '%s' that is already created",
@@ -19,7 +19,7 @@ public class SaveOneBannedWord {
             throw new AlreadyCreatedException(message);
         }
         var savedBannedWord = bannedWordDao.saveWord(word);
-        
+
         return savedBannedWord.getId();
     }
 }

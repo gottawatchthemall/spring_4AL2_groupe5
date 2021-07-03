@@ -31,7 +31,7 @@ class SaveOneBannedWordTest {
     void when_word_already_exists_should_throw_already_created_exception() {
         when(mockBannedWordDao.existsByWord(wordToBanned)).thenReturn(true);
 
-        assertThatThrownBy(() -> sut.execute(wordToBanned))
+        assertThatThrownBy(() -> sut.execute(wordToBanned, false))
                 .isExactlyInstanceOf(AlreadyCreatedException.class)
                 .hasMessage(
                         "Can't save word '%s' that is already created",
@@ -47,7 +47,7 @@ class SaveOneBannedWordTest {
                 .setWord(wordToBanned);
         when(mockBannedWordDao.saveWord(wordToBanned)).thenReturn(savedBannedWord);
 
-        var result = sut.execute(wordToBanned);
+        var result = sut.execute(wordToBanned, false);
 
         assertThat(result).isEqualTo(65L);
     }
