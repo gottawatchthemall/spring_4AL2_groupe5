@@ -12,6 +12,6 @@ public class UpdateUsersVulgar {
     private final UserDao userDao;
 
     public void execute(Set<Long> setUserId) {
-        //userDao.findAllById(setUserId);
+        userDao.findAllById(setUserId);
     }
 }
