@@ -13,4 +13,6 @@ public interface UserDao {
     Boolean existsByEmail(String email);
 
     User findById(Long userId);
+
+    Set<User> findAllById(Set<Long> setUserId);
 }

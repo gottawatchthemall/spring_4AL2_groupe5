@@ -1,11 +1,11 @@
 package com.gotta_watch_them_all.app.user.infrastructure.dao;
 
 import com.gotta_watch_them_all.app.common.exception.NotFoundException;
-import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import com.gotta_watch_them_all.app.role.core.entity.Role;
+import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.mapper.RoleMapper;
+import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import com.gotta_watch_them_all.app.user.core.entity.User;
 import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.entity.UserEntity;
-import com.gotta_watch_them_all.app.role.infrastructure.dataprovider.mapper.RoleMapper;
 import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.mapper.UserMapper;
 import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +50,26 @@ public class UserDaoImpl implements UserDao {
         var userEntity = userRepository.findById(userId);
         if (userEntity.isEmpty()) throw new NotFoundException(String.format("User with id %s does not exists", userId));
         return UserMapper.entityToDomain(userEntity.get());
+    }
+
+    @Override
+    public Set<User> findAllById(Set<Long> setUserId) {
+        var foundUsers = userRepository.findAllById(setUserId);
+
+        checkIfAllUserIdsCorrespondToFoundUsers(setUserId, foundUsers);
+
+        return foundUsers.stream()
+                .map(UserMapper::entityToDomain)
+                .collect(Collectors.toSet());
+    }
+
+    private void checkIfAllUserIdsCorrespondToFoundUsers(Set<Long> setUserId, java.util.List<UserEntity> foundUsers) {
+        var setNotFoundUserId = setUserId.stream()
+                .filter(userId -> foundUsers.stream().noneMatch(userEntity -> userEntity.getId().equals(userId)))
+                .collect(Collectors.toSet());
+        if (!setNotFoundUserId.isEmpty()) {
+            var message = String.format("Users with ids %s not found", setNotFoundUserId);
+            throw new NotFoundException(message);
+        }
     }
 }
