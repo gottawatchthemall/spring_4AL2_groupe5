@@ -25,7 +25,7 @@ public class BannedWordBootstrap {
             if (bannedWordDao.existsByWord(bannedWord)) {
                 return;
             }
-            bannedWordDao.save(bannedWord);
+            bannedWordDao.saveWord(bannedWord);
         });
     }
 }

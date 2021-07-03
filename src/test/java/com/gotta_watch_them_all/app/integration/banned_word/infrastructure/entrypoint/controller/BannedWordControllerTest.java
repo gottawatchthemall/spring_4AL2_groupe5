@@ -117,14 +117,28 @@ class BannedWordControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectToJson(saveBannedWordRequest)));
 
-            verify(mockSaveOneBannedWord, times(1)).execute("F word");
+            verify(mockSaveOneBannedWord, times(1)).execute("F word", false);
+        }
+
+        @Test
+        void when_request_correct_and_has_attribute_update_comment_to_true_should_call_usecase_save_one_banned_word_and_updateComment_to_true() throws Exception {
+            var saveBannedWordRequest = new SaveBannedWordRequest()
+                    .setWord("F word");
+
+            mockMvc.perform(
+                    post("/api/banned-word?update_comment=true")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectToJson(saveBannedWordRequest)));
+
+            verify(mockSaveOneBannedWord, times(1)).execute("F word", true);
         }
 
         @Test
         void when_usecase_throw_already_created_exception_should_send_forbidden_error_response() throws Exception {
             var saveBannedWordRequest = new SaveBannedWordRequest()
                     .setWord("F word");
-            when(mockSaveOneBannedWord.execute("F word")).thenThrow(new AlreadyCreatedException("already created"));
+            when(mockSaveOneBannedWord.execute("F word", false)).thenThrow(new AlreadyCreatedException("already created"));
 
             mockMvc.perform(
                     post("/api/banned-word")
@@ -138,7 +152,7 @@ class BannedWordControllerTest {
         void when_usecase_return_id_should_return_created_success_response_with_uri() throws Exception {
             var saveBannedWordRequest = new SaveBannedWordRequest()
                     .setWord("F word");
-            when(mockSaveOneBannedWord.execute("F word")).thenReturn(31L);
+            when(mockSaveOneBannedWord.execute("F word", false)).thenReturn(31L);
 
             var location = mockMvc.perform(
                     post("/api/banned-word")
@@ -296,6 +310,7 @@ class BannedWordControllerTest {
             ).andExpect(status().isBadRequest());
         }
 
+
         @Test
         void when_banned_word_id_is_correct_should_call_usecase_deleteBannedWordById() throws Exception {
             mockMvc.perform(
@@ -303,12 +318,22 @@ class BannedWordControllerTest {
                             .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
             );
 
-            verify(mockDeleteBannedWordById, times(1)).execute(76L);
+            verify(mockDeleteBannedWordById, times(1)).execute(76L, false);
+        }
+
+        @Test
+        void when_request_correct_and_has_attribute_update_comment_to_true_should_call_usecase_delete_banned_word_by_id_with_param_updateComment_to_true() throws Exception {
+            mockMvc.perform(
+                    delete("/api/banned-word/76?update_comment=true")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            );
+
+            verify(mockDeleteBannedWordById, times(1)).execute(76L, true);
         }
 
         @Test
         void when_usecase_throw_not_found_exception_should_send_not_found_error_response() throws Exception {
-            doThrow(new NotFoundException("not found")).when(mockDeleteBannedWordById).execute(76L);
+            doThrow(new NotFoundException("not found")).when(mockDeleteBannedWordById).execute(76L, false);
 
             mockMvc.perform(
                     delete("/api/banned-word/76")
@@ -318,12 +343,13 @@ class BannedWordControllerTest {
 
         @Test
         void when_usecase_do_nothing_should_send_not_content_success_response() throws Exception {
-            doNothing().when(mockDeleteBannedWordById).execute(76L);
+            doNothing().when(mockDeleteBannedWordById).execute(76L, false);
 
             mockMvc.perform(
                     delete("/api/banned-word/76")
                             .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
             ).andExpect(status().isNoContent());
         }
+
     }
 }

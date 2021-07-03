@@ -53,7 +53,7 @@ class BannedWordBootstrapTest {
 
         sut.on(mockApplicationReadyEvent);
 
-        verify(mockBannedWordDao, times(1)).save("php");
+        verify(mockBannedWordDao, times(1)).saveWord("php");
     }
 
     @Test
@@ -66,7 +66,7 @@ class BannedWordBootstrapTest {
 
         sut.on(mockApplicationReadyEvent);
 
-        verify(mockBannedWordDao, times(1)).save("symphony");
-        verify(mockBannedWordDao, times(1)).save("vba");
+        verify(mockBannedWordDao, times(1)).saveWord("symphony");
+        verify(mockBannedWordDao, times(1)).saveWord("vba");
     }
 }

@@ -46,7 +46,7 @@ class BannedWordDaoMySqlTest {
                     .setWord(bannedWordStr);
             when(mockBannedWordRepository.save(bannedWordToSave)).thenReturn(savedBannedWord);
 
-            var result = sut.save(bannedWordStr);
+            var result = sut.saveWord(bannedWordStr);
 
             var expectedSavedWord = new BannedWord()
                     .setId(93L)

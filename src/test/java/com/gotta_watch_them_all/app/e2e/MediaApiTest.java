@@ -104,7 +104,6 @@ public class MediaApiTest {
     @DisplayName("METHOD POST /api/media")
     @Nested
     class CreateMedia {
-        // TODO : check if auth user is admin
 
         @Test
         public void when_name_is_correct_should_create_media_and_return_uri() {
