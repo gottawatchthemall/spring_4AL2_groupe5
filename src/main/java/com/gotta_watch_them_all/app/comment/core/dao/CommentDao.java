@@ -18,4 +18,6 @@ public interface CommentDao {
     Long createComment(String content, Long workId, Long userId);
 
     void saveAll(Set<Comment> setComment);
+
+    Set<Comment> findAllByUserId(Long userId);
 }
