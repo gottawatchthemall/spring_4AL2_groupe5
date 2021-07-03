@@ -75,6 +75,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Set<User> saveAll(Set<User> setUser) {
-        return null;
+        var setUserEntity = setUser.stream()
+                .map(UserMapper::domainToEntity)
+                .collect(Collectors.toSet());
+        var savedUsers = userRepository.saveAll(setUserEntity);
+        return savedUsers.stream()
+                .map(UserMapper::entityToDomain)
+                .collect(Collectors.toSet());
     }
 }

@@ -167,4 +167,77 @@ class UserDaoImplTest {
             assertThat(result).isEqualTo(Set.of(expectedUser30, expectedUser31));
         }
     }
+
+    @DisplayName("method saveAll")
+    @Nested
+    class SaveAllTest {
+        @Test
+        void should_call_save_all_of_user_repository() {
+            var user1 = new User()
+                    .setName("user1")
+                    .setEmail("user1@gmail.com")
+                    .setPassword("user1password")
+                    .setRoles(Set.of(new Role().setId(1L).setName(RoleName.ROLE_USER)))
+                    .setVulgar(false);
+            var user2 = new User()
+                    .setName("user2")
+                    .setEmail("user2@gmail.com")
+                    .setPassword("user2password")
+                    .setRoles(Set.of(new Role().setId(1L).setName(RoleName.ROLE_USER)))
+                    .setVulgar(false);
+            var setUser = Set.of(user1, user2);
+
+            sut.saveAll(setUser);
+
+            var expectedUser1 = UserMapper.domainToEntity(user1);
+            var expectedUser2 = UserMapper.domainToEntity(user2);
+            var expectedSetUser = Set.of(expectedUser1, expectedUser2);
+
+            verify(mockUserRepository, times(1)).saveAll(expectedSetUser);
+        }
+
+        @Test
+        void when_userRepository_save_all_users_should_return_saved_users() {
+            var user1 = new User()
+                    .setName("user1")
+                    .setEmail("user1@gmail.com")
+                    .setPassword("user1password")
+                    .setRoles(Set.of(new Role().setId(1L).setName(RoleName.ROLE_USER)))
+                    .setVulgar(false);
+            var user2 = new User()
+                    .setName("user2")
+                    .setEmail("user2@gmail.com")
+                    .setPassword("user2password")
+                    .setRoles(Set.of(new Role().setId(1L).setName(RoleName.ROLE_USER)))
+                    .setVulgar(false);
+            var setUser = Set.of(user1, user2);
+            var expectedUser1 = UserMapper.domainToEntity(user1);
+            var expectedUser2 = UserMapper.domainToEntity(user2);
+            var expectedSetUser = Set.of(expectedUser1, expectedUser2);
+
+            var savedUser1 = new UserEntity()
+                    .setId(1L)
+                    .setUsername("user1")
+                    .setEmail("user1@gmail.com")
+                    .setPassword("user1password")
+                    .setRoles(Set.of(new RoleEntity().setId(1L).setName(RoleName.ROLE_USER)))
+                    .setVulgar(false);
+            var savedUser2 = new UserEntity()
+                    .setId(2L)
+                    .setUsername("user2")
+                    .setEmail("user2@gmail.com")
+                    .setPassword("user2password")
+                    .setRoles(Set.of(new RoleEntity().setId(1L).setName(RoleName.ROLE_USER)))
+                    .setVulgar(false);
+            var listSavedUser = List.of(savedUser1, savedUser2);
+            when(mockUserRepository.saveAll(expectedSetUser)).thenReturn(listSavedUser);
+
+            var result = sut.saveAll(setUser);
+
+            var expectedSetSavedUser = listSavedUser.stream()
+                    .map(UserMapper::entityToDomain)
+                    .collect(Collectors.toSet());
+            assertThat(result).isEqualTo(expectedSetSavedUser);
+        }
+    }
 }
