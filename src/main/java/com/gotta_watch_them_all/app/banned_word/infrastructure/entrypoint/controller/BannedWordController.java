@@ -68,9 +68,10 @@ public class BannedWordController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteById(
             @PathVariable("id")
-            @Min(value = 1, message = "id has to be equal or more than 1") Long bannedWordId
+            @Min(value = 1, message = "id has to be equal or more than 1") Long bannedWordId,
+            @RequestParam(name = "update_comment", defaultValue = "false") Boolean updateComment
     ) throws NotFoundException {
-        deleteBannedWordById.execute(bannedWordId, false);
+        deleteBannedWordById.execute(bannedWordId, updateComment);
         return noContent().build();
     }
 }
