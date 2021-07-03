@@ -39,10 +39,9 @@ public class BannedWordController {
             @Valid @RequestBody SaveBannedWordRequest request,
             @RequestParam(name = "update_comment", required = false, defaultValue = "false") Boolean updateComment
     ) {
-        System.out.println(updateComment);
         var bannedWordId = saveOneBannedWord.execute(request.getWord(), updateComment);
 
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest()
+        var uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(bannedWordId)
                 .toUri();

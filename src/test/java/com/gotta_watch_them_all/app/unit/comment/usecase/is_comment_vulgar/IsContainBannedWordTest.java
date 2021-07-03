@@ -13,7 +13,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-class isContainBannedWordTest {
+class IsContainBannedWordTest {
     @Autowired
     @Qualifier("IsContainBannedWord")
     private IsCommentVulgar sut;

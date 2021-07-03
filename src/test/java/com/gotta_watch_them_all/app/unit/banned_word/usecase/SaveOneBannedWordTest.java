@@ -3,6 +3,7 @@ package com.gotta_watch_them_all.app.unit.banned_word.usecase;
 import com.gotta_watch_them_all.app.banned_word.core.BannedWord;
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.banned_word.usecase.SaveOneBannedWord;
+import com.gotta_watch_them_all.app.comment.core.event.UpdateCommentsVulgarEventPublisher;
 import com.gotta_watch_them_all.app.common.exception.AlreadyCreatedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,9 +23,12 @@ class SaveOneBannedWordTest {
     @Mock
     private BannedWordDao mockBannedWordDao;
 
+    @Mock
+    UpdateCommentsVulgarEventPublisher mockEventPublisher;
+
     @BeforeEach
     void setup() {
-        sut = new SaveOneBannedWord(mockBannedWordDao);
+        sut = new SaveOneBannedWord(mockBannedWordDao, mockEventPublisher);
     }
 
     @Test

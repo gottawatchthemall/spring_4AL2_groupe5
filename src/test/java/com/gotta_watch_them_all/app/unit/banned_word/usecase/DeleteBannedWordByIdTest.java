@@ -2,6 +2,7 @@ package com.gotta_watch_them_all.app.unit.banned_word.usecase;
 
 import com.gotta_watch_them_all.app.banned_word.core.dao.BannedWordDao;
 import com.gotta_watch_them_all.app.banned_word.usecase.DeleteBannedWordById;
+import com.gotta_watch_them_all.app.comment.core.event.UpdateCommentsVulgarEventPublisher;
 import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +21,12 @@ class DeleteBannedWordByIdTest {
     @Mock
     private BannedWordDao mockBannedWordDao;
 
+    @Mock
+    private UpdateCommentsVulgarEventPublisher mockEventPublisher;
+
     @BeforeEach
     void setup() {
-        sut = new DeleteBannedWordById(mockBannedWordDao);
+        sut = new DeleteBannedWordById(mockBannedWordDao, mockEventPublisher);
     }
 
     @Test
