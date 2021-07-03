@@ -72,4 +72,9 @@ public class UserDaoImpl implements UserDao {
             throw new NotFoundException(message);
         }
     }
+
+    @Override
+    public Set<User> saveAll(Set<User> setUser) {
+        return null;
+    }
 }
