@@ -8,12 +8,14 @@ import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgarEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Set;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +64,9 @@ class UpdateCommentsVulgarListenerTest {
         sut.onApplicationEvent(event);
 
         var expectedSetUserId = Set.of(45L, 46L);
+        ArgumentCaptor<UpdateUsersVulgarEvent> argument = ArgumentCaptor.forClass(UpdateUsersVulgarEvent.class);
         verify(mockApplicationEventPublisher, times(1))
-                .publishEvent(new UpdateUsersVulgarEvent(sut, expectedSetUserId));
+                .publishEvent(argument.capture());
+        assertThat(argument.getValue().getSetUserId()).isEqualTo(expectedSetUserId);
     }
 }

@@ -16,8 +16,9 @@ public class UpdateUsersVulgarEvent extends ApplicationEvent {
     /**
      * Create a new {@code ApplicationEvent}.
      *
-     * @param source the object on which the event initially occurred or with
-     *               which the event is associated (never {@code null})
+     * @param source    the object on which the event initially occurred or with
+     *                  which the event is associated (never {@code null})
+     * @param setUserId
      */
     public UpdateUsersVulgarEvent(Object source, Set<Long> setUserId) {
         super(source);
