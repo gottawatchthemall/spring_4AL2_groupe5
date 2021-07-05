@@ -37,17 +37,22 @@ public class CommentDaoMySql implements CommentDao {
 
   @Override
   public Set<Comment> findByWorkId(Long workId) {
-    return null;
+    return commentRepository.findByWorkId(workId)
+        .stream()
+        .map(CommentMapper::entityToDomain)
+        .collect(Collectors.toSet());
   }
 
   @Override
   public Comment findById(Long commentId) {
-    return null;
+    return commentRepository.findById(commentId)
+        .map(CommentMapper::entityToDomain)
+        .orElse(null);
   }
 
   @Override
   public void deleteComment(Long commentId) {
-
+    commentRepository.deleteById(commentId);
   }
 
   @Override
