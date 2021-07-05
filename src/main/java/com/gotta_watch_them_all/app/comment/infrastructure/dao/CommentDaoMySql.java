@@ -8,6 +8,7 @@ import com.gotta_watch_them_all.app.comment.infrastructure.dataprovider.reposito
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,11 +19,14 @@ public class CommentDaoMySql implements CommentDao {
 
   @Override
   public Long createComment(String content, Long userId, Long workId) {
+    var actualDate = LocalDateTime.now();
+
     var savedCommentEntity = commentRepository.save(
         new CommentEntity()
             .setContent(content)
             .setUserId(userId)
             .setWorkId(workId)
+            .setPublishAt(actualDate)
     );
     return savedCommentEntity.getId();
   }
@@ -78,5 +82,4 @@ public class CommentDaoMySql implements CommentDao {
             .map(CommentMapper::entityToDomain)
             .collect(Collectors.toSet());
   }
-
 }
