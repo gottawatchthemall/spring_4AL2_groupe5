@@ -10,7 +10,8 @@ public class CommentMapper {
         .setContent(entity.getContent())
         .setVulgar(entity.isVulgar())
         .setWorkId(entity.getWorkId())
-        .setUserId(entity.getUserId());
+        .setUserId(entity.getUserId())
+        .setPublishAt(entity.getPublishAt());
   }
 
   public static CommentEntity domainToEntity(Comment comment) {
@@ -19,6 +20,7 @@ public class CommentMapper {
         .setContent(comment.getContent())
         .setVulgar(comment.isVulgar())
         .setWorkId(comment.getWorkId())
-        .setUserId(comment.getUserId());
+        .setUserId(comment.getUserId())
+        .setPublishAt(comment.getPublishAt());
   }
 }
