@@ -26,13 +26,12 @@ import static org.springframework.http.ResponseEntity.*;
 @Validated
 public class CommentController {
 
-  private CommentCreator commentCreator;
-
   private final CreateComment createComment;
   private final FindAllComment findAllComment;
   private final DeleteCommentById deleteCommentById;
   private final UpdateCommentById updateCommentById;
   private final FindOneCommentById findOneCommentById;
+  private final FindCommentsByWorkId findCommentsByWorkId;
 
   @PostMapping
   public ResponseEntity<Long> createComment(
@@ -53,6 +52,14 @@ public class CommentController {
   ) throws NotFoundException {
     var foundComment = findOneCommentById.execute(commentId);
     return ok(foundComment);
+  }
+
+  @GetMapping("work/{workId}")
+  public ResponseEntity<Set<Comment>> findByWorkId(
+      @PathVariable("workId") Long workId
+  ) {
+    var comments = findCommentsByWorkId.execute(workId);
+    return ok(comments);
   }
 
   @GetMapping

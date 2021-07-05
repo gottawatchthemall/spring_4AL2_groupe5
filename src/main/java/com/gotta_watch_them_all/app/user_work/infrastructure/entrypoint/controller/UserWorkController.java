@@ -76,6 +76,4 @@ public class UserWorkController {
         final var works = findWorksWatchedByOneUser.execute(userId);
         return ResponseEntity.ok(works);
     }
-
-
 }
