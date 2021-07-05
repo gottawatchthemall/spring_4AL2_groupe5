@@ -1,5 +1,6 @@
 package com.gotta_watch_them_all.app.user_work.infrastructure.entrypoint.controller;
 
+import com.gotta_watch_them_all.app.comment.usecase.FindCommentsByWorkId;
 import com.gotta_watch_them_all.app.user_work.usecase.FindWatchedWork;
 import com.gotta_watch_them_all.app.user_work.usecase.FindWorksWatchedByOneUser;
 import com.gotta_watch_them_all.app.user_work.usecase.RemoveWatchedWork;
@@ -22,6 +23,7 @@ public class UserWorkController {
     private final SaveWatchedWork saveWatchedWork;
     private final FindWatchedWork findWatchedWork;
     private final RemoveWatchedWork removeWatchedWork;
+    private final FindCommentsByWorkId findCommentsByWorkId;
     private final FindWorksWatchedByOneUser findWorksWatchedByOneUser;
 
     @PutMapping("/works/{workId}")
@@ -37,7 +39,11 @@ public class UserWorkController {
                 .buildAndExpand(
                         Map.of("workId", newUserWork.getWork().getId()))
                 .toUri();
-        return ResponseEntity.created(uri).body(newUserWork);
+
+        var comments = findCommentsByWorkId.execute(newUserWork.getWork().getId());
+        var newUserWorkWithComments = newUserWork.getWork().setComments(comments);
+
+        return ResponseEntity.created(uri).body(newUserWorkWithComments);
     }
 
     @DeleteMapping("/works/{workId}")
