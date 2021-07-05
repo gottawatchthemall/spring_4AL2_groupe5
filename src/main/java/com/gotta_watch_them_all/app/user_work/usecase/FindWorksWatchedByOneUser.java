@@ -1,6 +1,8 @@
 package com.gotta_watch_them_all.app.user_work.usecase;
 
 
+import com.gotta_watch_them_all.app.comment.core.dao.CommentDao;
+import com.gotta_watch_them_all.app.comment.usecase.FindCommentsByWorkId;
 import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import com.gotta_watch_them_all.app.user.core.dao.UserDao;
 import com.gotta_watch_them_all.app.user.core.entity.User;
@@ -12,12 +14,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class FindWorksWatchedByOneUser {
 
     private final UserDao userDao;
+    private final FindCommentsByWorkId findCommentsByWorkId;
 
     @Qualifier("mySqlDao")
     private final WorkDao workDaoMySql;
@@ -29,7 +33,12 @@ public class FindWorksWatchedByOneUser {
 
     public Set<Work> execute(Long userId) {
         final var user = findUserById(userId);
-        return userWorkDao.findWorksByUser(user);
+        return userWorkDao.findWorksByUser(user)
+            .stream()
+            .map(work -> {
+                var comments = findCommentsByWorkId.execute(work.getId());
+                return work.setComments(comments);
+            }).collect(Collectors.toSet());
     }
 
     private User findUserById(Long userId) {

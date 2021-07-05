@@ -1,11 +1,11 @@
 package com.gotta_watch_them_all.app.work.core.entity;
 
+import com.gotta_watch_them_all.app.comment.core.entity.Comment;
 import com.gotta_watch_them_all.app.media.core.Media;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -28,4 +28,5 @@ public class Work {
     private String poster;
     private Media media;
     private Integer score;
+    private Set<Comment> comments;
 }
