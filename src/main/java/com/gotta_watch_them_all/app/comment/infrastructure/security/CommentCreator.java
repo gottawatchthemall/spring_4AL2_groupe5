@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 public class CommentCreator {
   private final CommentDao commentDao;
   public boolean check(Long commentId, Long userId) {
-    return this.commentDao.findById(commentId).getId().equals(userId);
+    return this.commentDao.findById(commentId).getUserId().equals(userId);
   }
 }
