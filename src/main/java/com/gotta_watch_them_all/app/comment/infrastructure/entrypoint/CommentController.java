@@ -1,8 +1,12 @@
 package com.gotta_watch_them_all.app.comment.infrastructure.entrypoint;
 
-import com.gotta_watch_them_all.app.comment.usecase.CreateComment;
+import com.gotta_watch_them_all.app.comment.core.entity.Comment;
+import com.gotta_watch_them_all.app.comment.infrastructure.security.CommentCreator;
+import com.gotta_watch_them_all.app.comment.usecase.*;
+import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -10,7 +14,11 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
-import static org.springframework.http.ResponseEntity.created;
+import java.net.URI;
+import java.util.Map;
+import java.util.Set;
+
+import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +26,13 @@ import static org.springframework.http.ResponseEntity.created;
 @Validated
 public class CommentController {
 
+  private CommentCreator commentCreator;
+
   private final CreateComment createComment;
+  private final FindAllComment findAllComment;
+  private final DeleteCommentById deleteCommentById;
+  private final UpdateCommentById updateCommentById;
+  private final FindOneCommentById findOneCommentById;
 
   @PostMapping
   public ResponseEntity<Long> createComment(
@@ -31,5 +45,50 @@ public class CommentController {
         .buildAndExpand(commentId)
         .toUri();
     return created(uid).build();
+  }
+
+  @GetMapping("{id}")
+  public ResponseEntity<Comment> findById(
+      @PathVariable("id") Long commentId
+  ) throws NotFoundException {
+    var foundComment = findOneCommentById.execute(commentId);
+    return ok(foundComment);
+  }
+
+  @GetMapping
+  public ResponseEntity<Set<Comment>> findAll() {
+    var comments = findAllComment.execute();
+    return ok(comments);
+  }
+
+  @DeleteMapping("{id}")
+  @PreAuthorize("hasRole('ADMIN') || @commentCreator.check(#commentId, #userId)")
+  public ResponseEntity<?> deleteById(
+      @PathVariable("id") Long commentId,
+      @ApiIgnore @RequestAttribute("userId") String userId
+  ) throws NotFoundException {
+
+    deleteCommentById.execute(commentId);
+
+    return noContent().build();
+  }
+
+  @PutMapping("{id}")
+  @PreAuthorize("hasRole('ADMIN') || @commentCreator.check(#commentId, #userId)")
+  public ResponseEntity<URI> updateById(
+      @PathVariable("id") Long commentId,
+      @Valid @RequestBody UpdateComment request,
+      @ApiIgnore @RequestAttribute("userId") String userId
+  ) {
+    var updateComment = updateCommentById.execute(commentId, request.getContent());
+
+    var uri = ServletUriComponentsBuilder
+        .fromCurrentContextPath()
+        .path("/api/comment/{id}")
+        .buildAndExpand(
+            Map.of("id", updateComment.getId())
+        ).toUri();
+
+    return created(uri).build();
   }
 }
