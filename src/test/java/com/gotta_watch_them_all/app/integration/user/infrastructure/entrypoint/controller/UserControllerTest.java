@@ -4,6 +4,7 @@ import com.gotta_watch_them_all.app.helper.AuthHelper;
 import com.gotta_watch_them_all.app.helper.AuthHelperData;
 import com.gotta_watch_them_all.app.role.core.dao.RoleDao;
 import com.gotta_watch_them_all.app.role.core.entity.RoleName;
+import com.gotta_watch_them_all.app.user.core.dto.DtoUser;
 import com.gotta_watch_them_all.app.user.usecase.FindAllUser;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,10 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static com.gotta_watch_them_all.app.helper.JsonHelper.jsonToObject;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,6 +88,25 @@ class UserControllerTest {
                             .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
             );
             verify(mockFindAllUser, times(1)).execute(true);
+        }
+
+        @Test
+        void when_usecase_findAllUser_return_set_dto_user_should_send_success_with_set_dto_users() throws Exception {
+            var setDtoUser = Set.of(new DtoUser().setId(3L).setName("user").setEmail("user@gmail.com").setVulgar(true));
+            when(mockFindAllUser.execute(true)).thenReturn(setDtoUser);
+            var contentAsString = mockMvc.perform(
+                    get("/api/user?vulgar=true")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            ).andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+
+            var dtoUsers = jsonToObject(contentAsString, DtoUser[].class);
+            assertThat(dtoUsers).isNotNull();
+            assertThat(dtoUsers.length).isEqualTo(1);
+            var result = new HashSet<>(Arrays.asList(dtoUsers));
+            assertThat(result).isEqualTo(setDtoUser);
         }
     }
 }
