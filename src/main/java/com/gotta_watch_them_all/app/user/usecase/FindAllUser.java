@@ -15,12 +15,15 @@ import java.util.stream.Collectors;
 public class FindAllUser {
     private final UserDao userdao;
 
-    public Set<DtoUser> execute(Optional<Boolean> isVulgar) {
+    public Set<DtoUser> execute(Optional<Boolean> maybeIsVulgar) {
         var setUser = userdao.findAll();
-
-        return setUser.stream()
-                .filter(user -> isVulgar.isEmpty() || user.isVulgar() == isVulgar.get())
+        var setDtoUser = setUser.stream()
                 .map(UserAdapter::domainToDto)
                 .collect(Collectors.toSet());
+
+        return maybeIsVulgar.map(isVulgar -> setDtoUser.stream()
+                .filter(user -> user.isVulgar() == isVulgar)
+                .collect(Collectors.toSet()))
+                .orElse(setDtoUser);
     }
 }

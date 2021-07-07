@@ -13,7 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -38,7 +40,34 @@ class FindAllUserTest {
     }
 
     @Test
-    void when_find_all_users_should_return_set_vulgar_users() {
+    void when_find_all_user_and_optional_maybeIsVulgar_is_empty_should_return_all_set_users() {
+        var normalUser = new User()
+                .setId(3L)
+                .setVulgar(false)
+                .setName("user")
+                .setEmail("user@gmail.gom")
+                .setPassword("password")
+                .setRoles(Set.of(new Role().setId(3L).setName(RoleName.ROLE_USER)));
+        var vulgarUser = new User()
+                .setId(3L)
+                .setVulgar(true)
+                .setName("vulgar")
+                .setEmail("vulgar@gmail.gom")
+                .setPassword("vulgarpassword")
+                .setRoles(Set.of(new Role().setId(3L).setName(RoleName.ROLE_USER)));
+        var setUser = Set.of(normalUser, vulgarUser);
+
+        when(mockUserDao.findAll()).thenReturn(setUser);
+
+        var result = sut.execute(empty());
+
+        var expected = setUser.stream().map(UserAdapter::domainToDto).collect(Collectors.toSet());
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void when_find_all_users_and_optional_maybeIsVulgar_is_true_should_return_set_vulgar_users() {
         var normalUser = new User()
                 .setId(3L)
                 .setVulgar(false)
