@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 @RestController
 @Validated
 @RequiredArgsConstructor
@@ -20,10 +22,10 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<DtoUser> findAll(
+    public ResponseEntity<Set<DtoUser>> findAll(
             @RequestParam("vulgar") Boolean isVulgar
     ) {
-        findAllUser.execute(isVulgar);
-        return null;
+        var dtoUsers = findAllUser.execute(isVulgar);
+        return ResponseEntity.ok(dtoUsers);
     }
 }

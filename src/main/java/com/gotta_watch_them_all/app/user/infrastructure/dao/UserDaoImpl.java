@@ -83,4 +83,12 @@ public class UserDaoImpl implements UserDao {
                 .map(UserMapper::entityToDomain)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Set<User> findAll() {
+        var userEntities = userRepository.findAll();
+        return userEntities.stream()
+                .map(UserMapper::entityToDomain)
+                .collect(Collectors.toSet());
+    }
 }

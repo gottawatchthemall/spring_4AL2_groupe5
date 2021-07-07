@@ -240,4 +240,34 @@ class UserDaoImplTest {
             assertThat(result).isEqualTo(expectedSetSavedUser);
         }
     }
+
+    @DisplayName("method findAll")
+    @Nested
+    class FindAllTest {
+        @Test
+        void should_call_find_all_of_user_repository() {
+            sut.findAll();
+
+            verify(mockUserRepository, times(1)).findAll();
+        }
+
+        @Test
+        void when_get_users_should_return_set_domain_user() {
+            var listUserEntity = List.of(new UserEntity()
+                    .setId(2L)
+                    .setUsername("name")
+                    .setPassword("password")
+                    .setEmail("email@gmail.com")
+                    .setVulgar(true)
+                    .setRoles(Set.of(new RoleEntity().setId(1L).setName(RoleName.ROLE_USER))));
+            when(mockUserRepository.findAll()).thenReturn(listUserEntity);
+
+            var result = sut.findAll();
+
+            var expected = listUserEntity.stream()
+                    .map(UserMapper::entityToDomain)
+                    .collect(Collectors.toSet());
+            assertThat(result).isEqualTo(expected);
+        }
+    }
 }
