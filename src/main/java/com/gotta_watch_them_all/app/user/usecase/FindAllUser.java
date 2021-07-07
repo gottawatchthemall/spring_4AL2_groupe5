@@ -6,6 +6,7 @@ import com.gotta_watch_them_all.app.user.infrastructure.entrypoint.adapter.UserA
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,12 +14,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FindAllUser {
     private final UserDao userdao;
-    public Set<DtoUser> execute(Boolean isVulgar) {
-        var setUser = userdao.findAll();
 
-        return setUser.stream()
-                .filter(user -> user.isVulgar() == isVulgar)
+    public Set<DtoUser> execute(Optional<Boolean> maybeIsVulgar) {
+        var setUser = userdao.findAll();
+        var setDtoUser = setUser.stream()
                 .map(UserAdapter::domainToDto)
                 .collect(Collectors.toSet());
+
+        return maybeIsVulgar.map(isVulgar -> setDtoUser.stream()
+                .filter(user -> user.isVulgar() == isVulgar)
+                .collect(Collectors.toSet()))
+                .orElse(setDtoUser);
     }
 }

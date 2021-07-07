@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -24,7 +25,7 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Set<DtoUser>> findAll(
-            @RequestParam("vulgar") Boolean isVulgar
+            @RequestParam("vulgar") Optional<Boolean> isVulgar
     ) {
         var dtoUsers = findAllUser.execute(isVulgar);
         return ResponseEntity.ok(dtoUsers);
