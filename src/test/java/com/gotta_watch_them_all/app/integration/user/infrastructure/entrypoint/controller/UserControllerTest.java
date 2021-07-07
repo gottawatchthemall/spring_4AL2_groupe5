@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.gotta_watch_them_all.app.helper.JsonHelper.jsonToObject;
@@ -69,11 +70,30 @@ class UserControllerTest {
             mockMvc.perform(
                     get("/api/user")
                             .header("Authorization", "Bearer " + userHelperData.getJwtToken())
-            ).andExpect(status().isBadRequest());
+            ).andExpect(status().isForbidden());
+        }
+
+        @Test
+        void when_get_aall_when_usecase_findAllUser_return_set_dto_user_should_send_success_with_set_dto_users() throws Exception {
+            var setDtoUser = Set.of(new DtoUser().setId(3L).setName("user").setEmail("user@gmail.com").setVulgar(true));
+            when(mockFindAllUser.execute(Optional.empty())).thenReturn(setDtoUser);
+            var contentAsString = mockMvc.perform(
+                    get("/api/user")
+                            .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
+            ).andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+
+            var dtoUsers = jsonToObject(contentAsString, DtoUser[].class);
+            assertThat(dtoUsers).isNotNull();
+            assertThat(dtoUsers.length).isEqualTo(1);
+            var result = new HashSet<>(Arrays.asList(dtoUsers));
+            assertThat(result).isEqualTo(setDtoUser);
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"", " ", "\n", "\t", "notBoolean", "1.2"})
+        @ValueSource(strings = {"notBoolean", "1.2"})
         void when_request_param_vulgar_is_null_should_return_bad_request(String emptySource) throws Exception {
             mockMvc.perform(
                     get("/api/user?vulgar=" + emptySource)
@@ -87,13 +107,13 @@ class UserControllerTest {
                     get("/api/user?vulgar=true")
                             .header("Authorization", "Bearer " + adminHelperData.getJwtToken())
             );
-            verify(mockFindAllUser, times(1)).execute(true);
+            verify(mockFindAllUser, times(1)).execute(Optional.of(true));
         }
 
         @Test
-        void when_usecase_findAllUser_return_set_dto_user_should_send_success_with_set_dto_users() throws Exception {
+        void when_get_all_with_vulgar_request_param_to_true_and_usecase_findAllUser_return_set_dto_user_should_send_success_with_set_dto_users() throws Exception {
             var setDtoUser = Set.of(new DtoUser().setId(3L).setName("user").setEmail("user@gmail.com").setVulgar(true));
-            when(mockFindAllUser.execute(true)).thenReturn(setDtoUser);
+            when(mockFindAllUser.execute(Optional.of(true))).thenReturn(setDtoUser);
             var contentAsString = mockMvc.perform(
                     get("/api/user?vulgar=true")
                             .header("Authorization", "Bearer " + adminHelperData.getJwtToken())

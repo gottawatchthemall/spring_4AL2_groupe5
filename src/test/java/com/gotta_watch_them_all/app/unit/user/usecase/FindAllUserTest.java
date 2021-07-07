@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
+import static java.util.Optional.of;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +32,7 @@ class FindAllUserTest {
 
     @Test
     void should_call_userDao_find_all() {
-        sut.execute(true);
+        sut.execute(of(true));
 
         verify(mockUserDao, times(1)).findAll();
     }
@@ -56,7 +57,7 @@ class FindAllUserTest {
 
         when(mockUserDao.findAll()).thenReturn(setUser);
 
-        var result = sut.execute(true);
+        var result = sut.execute(of(true));
 
         var expectedDtoVulgarUser = UserAdapter.domainToDto(vulgarUser);
         var expected = Set.of(expectedDtoVulgarUser);
