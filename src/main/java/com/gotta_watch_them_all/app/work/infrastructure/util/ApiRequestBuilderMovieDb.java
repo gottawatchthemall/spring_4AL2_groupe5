@@ -19,6 +19,14 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     private String titleToSearch;
     private String imdbIdToSearch;
 
+    public String getTitleToSearch() {
+        return titleToSearch;
+    }
+
+    public String getImdbIdToSearch() {
+        return imdbIdToSearch;
+    }
+
     @Value("${moviedb.api.key}")
     private String apiKey;
 
@@ -28,16 +36,19 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     @Override
     public HttpRequest build() {
         setUri();
-        return HttpRequest
+        final var request = HttpRequest
                 .newBuilder()
                 .uri(uri)
                 .header("x-rapidapi-key", apiKey)
                 .header("x-rapidapi-host", apiHost)
                 .build();
+
+        cleanSearchingCriterions();
+        return request;
     }
 
     @Override
-    public ApiRequestBuilderMovieDb setUri() {
+    public ApiRequestBuilder setUri() {
         checkSearchExceptions();
 
         String url = String.format("https://%s", apiHost);
@@ -61,7 +72,7 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
     }
 
     @Override
-    public ApiRequestBuilderMovieDb setTitleToSearch(String title) {
+    public ApiRequestBuilder setTitleToSearch(String title) {
         if (title == null) throw new IllegalTitleGivenException("Title to search can not be null");
         if (title.isBlank()) throw new IllegalTitleGivenException("Title to search can not be empty");
         titleToSearch = title;
@@ -76,4 +87,10 @@ public class ApiRequestBuilderMovieDb implements ApiRequestBuilder {
         imdbIdToSearch = id;
         return this;
     }
+
+    public void cleanSearchingCriterions() {
+        this.titleToSearch = null;
+        this.imdbIdToSearch = null;
+    }
+
 }

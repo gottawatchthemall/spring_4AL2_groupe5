@@ -7,9 +7,13 @@ import com.gotta_watch_them_all.app.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UpdateCommentById {
+    private final Clock clock;
     private final CommentDao commentDao;
     private final CommentRepository commentRepository;
 
@@ -22,6 +26,8 @@ public class UpdateCommentById {
       }
 
       var newComment = commentDao.findById(commentId).setContent(content);
+
+      newComment.setPublishAt(LocalDateTime.now(clock));
 
       return commentDao.save(newComment);
     }

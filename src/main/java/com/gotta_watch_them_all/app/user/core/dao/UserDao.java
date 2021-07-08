@@ -17,4 +17,8 @@ public interface UserDao {
     Set<User> findAllById(Set<Long> setUserId);
 
     Set<User> saveAll(Set<User> setUser);
+
+    Set<User> findAll();
+
+    Set<User> findAllBySearchingName(String username);
 }

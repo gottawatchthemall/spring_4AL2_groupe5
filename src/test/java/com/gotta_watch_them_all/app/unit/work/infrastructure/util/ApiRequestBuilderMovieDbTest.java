@@ -184,4 +184,18 @@ class ApiRequestBuilderMovieDbTest {
         assertThrows(TooManySearchArgumentsException.class, () -> sut.setUri());
     }
 
+    @Test
+    public void build_should_reset_imdb_to_search() {
+        sut.setWorkIdToSearch("id");
+        sut.build();
+        assertNull(sut.getImdbIdToSearch());
+    }
+
+    @Test
+    public void build_should_reset_title_to_search() {
+        sut.setTitleToSearch("titre");
+        sut.build();
+        assertNull(sut.getTitleToSearch());
+    }
+
 }
