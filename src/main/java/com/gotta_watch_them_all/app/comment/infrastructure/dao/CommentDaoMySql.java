@@ -84,4 +84,9 @@ public class CommentDaoMySql implements CommentDao {
             .map(CommentMapper::entityToDomain)
             .collect(Collectors.toSet());
   }
+
+  @Override
+  public Boolean existsById(Long commentId) {
+    return commentRepository.existsById(commentId);
+  }
 }
