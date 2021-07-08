@@ -25,9 +25,21 @@ public class UpdateCommentsVulgar {
         var result = new HashSet<Comment>();
         var setComment = commentDao.findAll();
         var setBannedWord = bannedWordDao.findAll();
-        var setContentBannedWord = setBannedWord.stream()
+        var setContentBannedWord = getSetContentBannedWord(setBannedWord);
+
+        updateCommentsVulgarAndAddToResultChangedOnes(result, setComment, setContentBannedWord);
+
+        commentDao.saveAll(setComment);
+        return result;
+    }
+
+    private Set<String> getSetContentBannedWord(Set<BannedWord> setBannedWord) {
+        return setBannedWord.stream()
                 .map(BannedWord::getWord)
                 .collect(Collectors.toSet());
+    }
+
+    private void updateCommentsVulgarAndAddToResultChangedOnes(HashSet<Comment> result, Set<Comment> setComment, Set<String> setContentBannedWord) {
         setComment.forEach(comment -> {
             var isVulgar = comment.isVulgar();
             var hasBannedWord = isCommentVulgar.execute(comment.getContent(), setContentBannedWord);
@@ -36,8 +48,5 @@ public class UpdateCommentsVulgar {
                 result.add(comment);
             }
         });
-
-        commentDao.saveAll(setComment);
-        return result;
     }
 }
