@@ -1,7 +1,7 @@
 package com.gotta_watch_them_all.app.unit.user.infrastructure.dataprovider.event.publisher;
 
 import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgarEvent;
-import com.gotta_watch_them_all.app.user.infrastructure.dataprovider.event.publisher.UpdateUsersVulgarEventPublisherImpl;
+import com.gotta_watch_them_all.app.user.infrastructure.event.publisher.UpdateUsersVulgarEventPublisherImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
