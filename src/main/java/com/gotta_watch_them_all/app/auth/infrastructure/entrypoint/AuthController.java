@@ -12,7 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -54,16 +57,9 @@ public class AuthController {
         signUp.execute(
                 signupRequest.getUsername(),
                 signupRequest.getEmail(),
-                signupRequest.getPassword(),
-                signupRequest.getRoles()
+                signupRequest.getPassword()
         );
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test(@RequestAttribute(name = "userId") String userId) {
-        var response = String.format("userId : %s", userId);
-        return ResponseEntity.ok(response);
     }
 }
