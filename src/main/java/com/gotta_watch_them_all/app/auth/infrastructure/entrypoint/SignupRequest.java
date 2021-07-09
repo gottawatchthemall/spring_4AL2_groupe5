@@ -5,7 +5,6 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
 @Data
 @Accessors(chain = true)
@@ -16,6 +15,4 @@ public class SignupRequest {
     private String email;
     @NotBlank
     private String password;
-    
-    private Set<String> roles;
 }

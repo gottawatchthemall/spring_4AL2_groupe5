@@ -57,8 +57,7 @@ public class AuthController {
         signUp.execute(
                 signupRequest.getUsername(),
                 signupRequest.getEmail(),
-                signupRequest.getPassword(),
-                signupRequest.getRoles()
+                signupRequest.getPassword()
         );
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
