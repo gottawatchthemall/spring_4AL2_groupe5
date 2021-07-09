@@ -1,4 +1,4 @@
-package com.gotta_watch_them_all.app.user.infrastructure.dataprovider.event.publisher;
+package com.gotta_watch_them_all.app.user.infrastructure.event.publisher;
 
 import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgarEvent;
 import com.gotta_watch_them_all.app.user.core.event.UpdateUsersVulgarEventPublisher;
