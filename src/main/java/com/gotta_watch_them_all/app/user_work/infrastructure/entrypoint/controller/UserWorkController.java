@@ -32,7 +32,7 @@ public class UserWorkController {
     private final FindWorksWatchedByOneUser findWorksWatchedByOneUser;
 
     @PutMapping("/works/{workId}")
-    public ResponseEntity<UserWorkResponse> saveWatchedWork(
+    public ResponseEntity<WorkWithDetailsResponse> saveWatchedWork(
             @PathVariable("workId")
             @NotBlank(message = "id has to be") String workId,
             @ApiIgnore @RequestAttribute("userId") String userId
@@ -48,7 +48,7 @@ public class UserWorkController {
         var comments = findCommentsByWorkId.execute(newUserWork.getWork().getId());
         newUserWork.getWork().setComments(comments);
 
-        return ResponseEntity.created(uri).body(UserWorkAdapter.toUserWorkResponse(newUserWork));
+        return ResponseEntity.created(uri).body(WorkAdapter.toDetailResponse(newUserWork.getWork()));
     }
 
     @DeleteMapping("/works/{workId}")
@@ -66,6 +66,7 @@ public class UserWorkController {
             @ApiIgnore @RequestAttribute("userId") String userId
     ) {
         final var works = findWorksWatchedByOneUser.execute(Long.valueOf(userId));
+        System.out.println(works);
         return ResponseEntity.ok(WorkAdapter.toDetailResponses(works));
     }
 
