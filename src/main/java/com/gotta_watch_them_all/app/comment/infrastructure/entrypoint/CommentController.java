@@ -15,8 +15,11 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 
 import java.net.URI;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.*;
 
@@ -26,76 +29,81 @@ import static org.springframework.http.ResponseEntity.*;
 @Validated
 public class CommentController {
 
-  private final CreateComment createComment;
-  private final FindAllComment findAllComment;
-  private final DeleteCommentById deleteCommentById;
-  private final UpdateCommentById updateCommentById;
-  private final FindOneCommentById findOneCommentById;
-  private final FindCommentsByWorkId findCommentsByWorkId;
+    private final CreateComment createComment;
+    private final FindAllComment findAllComment;
+    private final DeleteCommentById deleteCommentById;
+    private final UpdateCommentById updateCommentById;
+    private final FindOneCommentById findOneCommentById;
+    private final FindCommentsByWorkId findCommentsByWorkId;
 
-  @PostMapping
-  public ResponseEntity<Long> createComment(
-      @Valid @RequestBody CreateCommentRequest comment,
-      @ApiIgnore @RequestAttribute("userId") String userId
-  ) {
-    var commentId = createComment.execute(comment.getContent(), Long.parseLong(userId), comment.getWorkId());
-    var uid = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(commentId)
-        .toUri();
-    return created(uid).build();
-  }
+    @PostMapping
+    public ResponseEntity<Long> createComment(
+            @Valid @RequestBody CreateCommentRequest comment,
+            @ApiIgnore @RequestAttribute("userId") String userId
+    ) {
+        var commentId = createComment.execute(comment.getContent(), Long.parseLong(userId), comment.getWorkId());
+        var uid = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(commentId)
+                .toUri();
+        return created(uid).build();
+    }
 
-  @GetMapping("{id}")
-  public ResponseEntity<Comment> findById(
-      @PathVariable("id") Long commentId
-  ) throws NotFoundException {
-    var foundComment = findOneCommentById.execute(commentId);
-    return ok(foundComment);
-  }
+    @GetMapping("{id}")
+    public ResponseEntity<Comment> findById(
+            @PathVariable("id") Long commentId
+    ) throws NotFoundException {
+        var foundComment = findOneCommentById.execute(commentId);
+        return ok(foundComment);
+    }
 
-  @GetMapping("work/{workId}")
-  public ResponseEntity<Set<Comment>> findByWorkId(
-      @PathVariable("workId") Long workId
-  ) {
-    var comments = findCommentsByWorkId.execute(workId);
-    return ok(comments);
-  }
+    @GetMapping("work/{workId}")
+    public ResponseEntity<List<Comment>> findByWorkId(
+            @PathVariable("workId") Long workId
+    ) {
+        var comments = findCommentsByWorkId.execute(workId);
 
-  @GetMapping
-  public ResponseEntity<Set<Comment>> findAll() {
-    var comments = findAllComment.execute();
-    return ok(comments);
-  }
+        var sortedComments = comments.stream()
+                .sorted(Comparator.comparing(Comment::getPublishAt))
+                .collect(Collectors.toList());
 
-  @DeleteMapping("{id}")
-  @PreAuthorize("hasRole('ADMIN') || @commentCreator.check(#commentId, #userId)")
-  public ResponseEntity<?> deleteById(
-      @PathVariable("id") Long commentId,
-      @ApiIgnore @RequestAttribute("userId") String userId
-  ) throws NotFoundException {
+        return ok(sortedComments);
+    }
 
-    deleteCommentById.execute(commentId);
+    @GetMapping
+    public ResponseEntity<Set<Comment>> findAll() {
+        var comments = findAllComment.execute();
+        return ok(comments);
+    }
 
-    return noContent().build();
-  }
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN') || @commentCreator.check(#commentId, #userId)")
+    public ResponseEntity<?> deleteById(
+            @PathVariable("id") Long commentId,
+            @ApiIgnore @RequestAttribute("userId") String userId
+    ) throws NotFoundException {
 
-  @PutMapping("{id}")
-  @PreAuthorize("hasRole('ADMIN') || @commentCreator.check(#commentId, #userId)")
-  public ResponseEntity<URI> updateById(
-      @PathVariable("id") Long commentId,
-      @Valid @RequestBody UpdateComment request,
-      @ApiIgnore @RequestAttribute("userId") String userId
-  ) {
-    var updateComment = updateCommentById.execute(commentId, request.getContent());
+        deleteCommentById.execute(commentId);
 
-    var uri = ServletUriComponentsBuilder
-        .fromCurrentContextPath()
-        .path("/api/comment/{id}")
-        .buildAndExpand(
-            Map.of("id", updateComment.getId())
-        ).toUri();
+        return noContent().build();
+    }
 
-    return created(uri).build();
-  }
+    @PutMapping("{id}")
+    @PreAuthorize("hasRole('ADMIN') || @commentCreator.check(#commentId, #userId)")
+    public ResponseEntity<URI> updateById(
+            @PathVariable("id") Long commentId,
+            @Valid @RequestBody UpdateComment request,
+            @ApiIgnore @RequestAttribute("userId") String userId
+    ) {
+        var updateComment = updateCommentById.execute(commentId, request.getContent());
+
+        var uri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/api/comment/{id}")
+                .buildAndExpand(
+                        Map.of("id", updateComment.getId())
+                ).toUri();
+
+        return created(uri).build();
+    }
 }
